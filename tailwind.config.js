@@ -5,6 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontSize: {
+      start: '18px',
+    },
+    fontFamily: {
+      ms: ["MS-Sans-Serif"],
+    },
     extend: {
       colors: {
         'desktop': '#018281',
