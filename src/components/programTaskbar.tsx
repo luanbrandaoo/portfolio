@@ -1,12 +1,11 @@
 import React from 'react';
 import './components.css'
-import windowsLogo from '../assets/windowslogo.png'; 
 
-const ProgramTaskbar = () => {
+const ProgramTaskbar = (props) => {
     return (
-        <div className="h-8 startMenuButton flex align-center justify-center px-2">
-            <img src={windowsLogo} className="h-6 mt-1"></img>
-            <span className="text-black font-ms font-bold text-start mt-1 ml-1">Program name</span>
+        <div className="h-8 programTaskbar flex align-center justify-center px-2">
+            <img src={props.icon} className="h-6 mt-1"></img>
+            <span className="text-black font-ms font-normal text-start mt-1 ml-1">{props.programName}</span>
         </div>
       );
     }

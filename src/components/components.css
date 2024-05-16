@@ -7,3 +7,11 @@
     border-right: 1.5px solid #5a5a5a;
   }
   
+.programTaskbar {
+    background-color: silver;
+    box-shadow: 1.5px 1.5px #000;
+    border-top: 1.5px solid #fafafa;
+    border-left: 1.5px solid #fafafa;
+    border-bottom: 1.5px solid #5a5a5a;
+    border-right: 1.5px solid #5a5a5a;
+  }
