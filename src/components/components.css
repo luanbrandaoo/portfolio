@@ -15,3 +15,11 @@
     border-bottom: 1.5px solid #5a5a5a;
     border-right: 1.5px solid #5a5a5a;
   }
+
+.clock {
+    background-color: silver;
+    border-top: 1.5px solid #5a5a5a;
+    border-left: 1.5px solid #5a5a5a;
+    border-bottom: 1.5px solid #fafafa;
+    border-right: 1.5px solid #fafafa;
+  }

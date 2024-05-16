@@ -7,6 +7,7 @@ export default {
   theme: {
     fontSize: {
       start: '18px',
+      clock: '15px',
     },
     fontFamily: {
       ms: ["MS-Sans-Serif"],
