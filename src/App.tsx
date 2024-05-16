@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Taskbar from './components/taskbar'
+import Taskbar from './components/taskbar/taskbar'
 
 export default function App() {
   return (

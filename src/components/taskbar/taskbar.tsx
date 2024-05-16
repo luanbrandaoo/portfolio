@@ -3,7 +3,7 @@ import StartMenuButton from './startMenuButton'
 import ProgramTaskbar from './programTaskbar'
 import Clock from './clock'
 
-import programLogo from '../assets/windowslogo.png';
+import programLogo from '../../assets/windowslogo.png';
 
 const Taskbar = () => {
   return (

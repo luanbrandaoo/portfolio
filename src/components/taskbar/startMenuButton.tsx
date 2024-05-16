@@ -1,6 +1,6 @@
 import React from 'react';
 import './components.css'
-import windowsLogo from '../assets/windowslogo.png'; 
+import windowsLogo from '../../assets/windowslogo.png'; 
 
 const StartMenuButton = () => {
   return (
