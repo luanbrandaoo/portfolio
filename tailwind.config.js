@@ -18,6 +18,7 @@ export default {
         'silver': '#c0c0c0',
         'border': '#fafafa',
         'border2': '#5a5a5a',
+        'selection': '#000076',
       },
     }
   }

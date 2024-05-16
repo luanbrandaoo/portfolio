@@ -1,0 +1,12 @@
+.selectionBorder{
+  border: 1px dotted #000;
+}
+
+.iconSelection{
+  filter: sepia(200%) brightness(33%) hue-rotate(160deg) saturate(230%);
+  }
+
+.textSelection{
+  background-color: #000076;
+  border: 1px dotted #ffff94;
+}
