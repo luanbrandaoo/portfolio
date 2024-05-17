@@ -10,3 +10,16 @@
     margin: 2px;
     padding: 5px 7px 5px 7px;
 }
+
+.windowButtons{
+    border-color: #fafafa #5a5a5a #5a5a5a #fafafa;
+    border-style: solid;
+    border-width: 2px;
+    box-shadow: 1px 1px #000;
+}
+
+.windowButtonsClick{
+    border-color: #000 #fafafa #fafafa #000;
+    border-style: solid;
+    border-width: 2px;
+}

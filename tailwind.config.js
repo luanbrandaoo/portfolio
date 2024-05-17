@@ -6,6 +6,7 @@ export default {
   ],
   theme: {
     fontSize: {
+      window: '18px',
       start: '18px',
       clock: '15px',
     },
