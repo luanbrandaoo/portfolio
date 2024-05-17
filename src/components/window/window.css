@@ -1,0 +1,12 @@
+.window{
+    border-color: #fafafa #5a5a5a #5a5a5a #fafafa;
+    border-style: solid;
+    border-width: 2px 1.5px 1.5px 2px;
+    box-shadow: 1.5px 1.5px #000;
+    outline: 1px solid #dedede;
+}
+
+.titleBox{
+    margin: 2px;
+    padding: 5px 7px 5px 7px;
+}

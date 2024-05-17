@@ -19,6 +19,7 @@ export default {
         'border': '#fafafa',
         'border2': '#5a5a5a',
         'selection': '#000076',
+        'windowblue': '#00007c',
       },
     }
   }
