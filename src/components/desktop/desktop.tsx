@@ -6,7 +6,7 @@ import Window from '../window/window';
 
 const Desktop = () => {
   return (
-    <main className="bg-desktop h-full">
+    <main className="bg-desktop h-full w-full overflow-hidden fixed">
         <Shortcut programName="Program 1" icon={programLogo} />
         <Shortcut programName="Program 2" icon={programLogo} />
         <Window>

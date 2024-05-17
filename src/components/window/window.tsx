@@ -50,7 +50,9 @@ const Janela = ({ children }) => {
           </div>
         </div>
       </div>
-      {children}
+      <div className='bg-desktop h-full contentbox'>
+        {children}
+      </div>
     </div>
   );
 }
