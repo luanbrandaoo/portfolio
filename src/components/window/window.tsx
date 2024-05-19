@@ -2,10 +2,25 @@ import React, { useState } from 'react';
 import './window.css';
 import logo from '../../assets/folderwithfile.png';
 
-const Janela = ({ children }) => {
+const Janela = ({programName, icon, children }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [position, setPosition] = useState({ x: 50, y: 50 });
+
   const [clickMinimize, setClickMinimize] = useState(false);
   const [clickMaximize, setClickMaximize] = useState(false);
   const [clickClose, setClickClose] = useState(false);
+
+
+  const handleDragging  = () => {
+    console.log('dragging')
+    setIsDragging(true);
+    setPosition({ x: 2, y: 2 }); 
+  };
+
+  const handleStopDragging  = () => {
+    setIsDragging(false);
+  };
+
 
   const handleMouseDownMinimize = () => {
     setClickMinimize(true);
@@ -32,11 +47,11 @@ const Janela = ({ children }) => {
   };
 
   return (
-    <div className="h-[32rem] w-[42rem] bg-silver window">
+    <div className={"h-[32rem] w-[42rem] bg-silver window z-10"} style={{ position: 'absolute', top: `${position.y}px`, left: `${position.x}px` }} onMouseDown={handleDragging} onMouseUp={handleStopDragging}>
       <div className="h-9 w-auto titleBox bg-windowblue flex flex-row justify-between">
         <div className='flex flex-row gap-2 align-center'>
-          <img src={logo} className="h-6" alt="Logo"></img>
-          <span className='text-white font-ms font-normal text-start'>Program name</span>
+          <img src={icon} className="h-6"></img>
+          <span className='text-white font-ms font-normal text-start'>{programName}</span>
         </div>
         <div className='flex flex-row gap-1 align-center m-px'>
           <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickMinimize ? 'windowButtonsClick' : ''}`} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}>
