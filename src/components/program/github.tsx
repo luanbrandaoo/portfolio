@@ -1,5 +1,3 @@
-import React from 'react';
-
 import githubLogo from '../../assets/github.png'; 
 import Window from '../window/window'; 
 

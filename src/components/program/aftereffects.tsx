@@ -1,5 +1,3 @@
-import React from 'react';
-
 import aftereffectsLogo from '../../assets/aftereffects.png'; 
 import Window from '../window/window'; 
 

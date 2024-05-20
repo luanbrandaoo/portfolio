@@ -1,5 +1,3 @@
-import React from 'react';
-
 import fileLogo from '../../assets/file.png'; 
 import Window from '../window/window'; 
 

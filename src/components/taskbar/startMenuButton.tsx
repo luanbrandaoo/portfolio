@@ -1,4 +1,3 @@
-import React from 'react';
 import './taskbarComponents.css'
 import windowsLogo from '../../assets/windowslogo.png'; 
 

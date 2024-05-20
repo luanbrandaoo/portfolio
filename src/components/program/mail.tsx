@@ -1,5 +1,3 @@
-import React from 'react';
-
 import mailLogo from '../../assets/mail.png'; 
 import Window from '../window/window'; 
 

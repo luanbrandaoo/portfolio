@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Shortcut from './shortcut'
 import Window from '../window/window'; 
 

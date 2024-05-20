@@ -1,4 +1,3 @@
-import React from 'react';
 import StartMenuButton from './startMenuButton';
 import ProgramTaskbar from './programTaskbar';
 import Clock from './clock';

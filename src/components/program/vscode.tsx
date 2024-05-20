@@ -1,5 +1,3 @@
-import React from 'react';
-
 import vscodeLogo from '../../assets/vscode.png'; 
 import Window from '../window/window'; 
 
