@@ -47,7 +47,7 @@ const Janela = ({programName, icon, children }) => {
   };
 
   return (
-    <div className={"h-[32rem] w-[42rem] bg-silver window z-10"} style={{ position: 'absolute', top: `${position.y}px`, left: `${position.x}px` }} onMouseDown={handleDragging} onMouseUp={handleStopDragging}>
+    <div className={"h-[32rem] w-[42rem] bg-silver window z-10 flex flex-col"} style={{ position: 'absolute', top: `${position.y}px`, left: `${position.x}px` }} onMouseDown={handleDragging} onMouseUp={handleStopDragging}>
       <div className="h-9 w-auto titleBox bg-windowblue flex flex-row justify-between">
         <div className='flex flex-row gap-2 align-center'>
           <img src={icon} className="h-6"></img>
@@ -65,7 +65,7 @@ const Janela = ({programName, icon, children }) => {
           </div>
         </div>
       </div>
-      <div className='bg-desktop h-full contentbox'>
+      <div className='bg-border2 contentbox h-full'>
         {children}
       </div>
     </div>
