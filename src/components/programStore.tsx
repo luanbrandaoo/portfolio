@@ -1,4 +1,4 @@
-import create from 'zustand';
+import {create} from 'zustand';
 
 import Resume from './program/resume';
 import Mail from './program/mail';
@@ -16,9 +16,17 @@ export const componentMap = {
 
 const useProgramStore = create((set) => ({
   programs: [],
-  addProgram: (program) => set((state) => ({ programs: [...state.programs, program] })),
-  removeProgram: (programName) => set((state) => ({ programs: state.programs.filter((p) => p.programName !== programName) })),
-}));
+  addProgram: (program) => set((state) => ({
+    programs: [...state.programs, { ...program, position: { x: 50, y: 50 } }]
+  })),
+  removeProgram: (programName) => set((state) => ({
+    programs: state.programs.filter((p) => p.programName !== programName)
+  })),
+  setPosition: (programName, x, y) => set((state) => ({
+    programs: state.programs.map((program) =>
+      program.programName === programName ? { ...program, position: { x, y } } : program
+    )
+  }))
+}))
 
 export default useProgramStore;
-

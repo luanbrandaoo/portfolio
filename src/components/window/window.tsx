@@ -1,10 +1,17 @@
 import { useState } from 'react';
 import './window.css';
-import logo from '../../assets/folderwithfile.png';
 
-const Janela = ({programName, icon, children }) => {
+import useProgramStore from '../programStore';
+
+const Janela = ({programName, icon, children}) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState({ x: 50, y: 50 });
+  const { programs, setPosition } = useProgramStore(state => ({
+    programs: state.programs,
+    setPosition: state.setPosition
+  }));
+
+  const program = programs.find(p => p.programName === programName);
+
 
   const [clickMinimize, setClickMinimize] = useState(false);
   const [clickMaximize, setClickMaximize] = useState(false);
@@ -14,7 +21,7 @@ const Janela = ({programName, icon, children }) => {
   const handleDragging  = () => {
     console.log('dragging')
     setIsDragging(true);
-    setPosition({ x: 2, y: 2 }); 
+    setPosition(programName, 2, 2);
   };
 
   const handleStopDragging  = () => {
@@ -47,7 +54,9 @@ const Janela = ({programName, icon, children }) => {
   };
 
   return (
-    <div className={"h-[32rem] w-[42rem] bg-silver window z-10 flex flex-col"} style={{ position: 'absolute', top: `${position.y}px`, left: `${position.x}px` }} onMouseDown={handleDragging} onMouseUp={handleStopDragging}>
+    <div className={"h-[32rem] w-[42rem] bg-silver window z-10 flex flex-col"}
+        style={{ position: 'absolute', top: `${program.position.y}px`, left: `${program.position.x}px` }}
+        onMouseDown={handleDragging} onMouseUp={handleStopDragging}>
       <div className="h-9 w-auto titleBox bg-windowblue flex flex-row justify-between">
         <div className='flex flex-row gap-2 align-center'>
           <img src={icon} className="h-6"></img>
