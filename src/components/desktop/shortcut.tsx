@@ -1,15 +1,38 @@
 import { useState } from 'react';
 import './desktopComponents.css';
 
+import useProgramStore from '../programStore';
+
 const Shortcut = (props) => {
-  const [click, setClick] = useState(false);
+  const programs = useProgramStore((state) => state.programs);
+  const addProgram = useProgramStore((state) => state.addProgram);
+
+  const handleShortcutClick = (programName, icon) => {
+    const newProgram = {
+      programName,
+      icon,
+    };
+
+    addProgram(newProgram);
+  };
+  
+
+  const [firstClick, setFirstClick] = useState(false);
+  const [secondClick, setSecondClick] = useState(false);
 
   const handleMouseDown = () => {
-    setClick(true);
+    if (firstClick) {
+      setSecondClick(true);
+      setFirstClick(false);
+      handleShortcutClick(props.programName, props.icon)
+    }
+    else{
+      setFirstClick(true);
+    }
   };
 
   const handleMouseUp = () => {
-    
+
   };
 
   return (
@@ -19,11 +42,11 @@ const Shortcut = (props) => {
       onMouseUp={handleMouseUp}
     >
       <img
-        className={`h-12 mt-1 ${click ? 'iconSelection' : ''}`}
+        className={`h-12 mt-1 ${firstClick ? 'iconSelection' : ''}`}
         src={props.icon}
       ></img>
       <span
-        className={`text-white font-ms font-normal text-clock ${click ? 'textSelection' : ''}`}
+        className={`text-white font-ms font-normal text-clock ${firstClick ? 'textSelection' : ''}`}
       >
         {props.programName}
       </span>
