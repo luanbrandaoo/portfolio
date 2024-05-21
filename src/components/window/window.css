@@ -27,3 +27,20 @@
 .contentbox{
     margin: 2px;
 }
+
+.dragWindow{
+    border: 2px dotted #ffff94;
+}
+
+.pointernone{
+    pointer-events: none;
+}
+
+.pointerauto{
+    pointer-events: auto;
+}
+
+.handle{
+    margin: 2px;
+    padding: 5px 7px 5px 7px;
+}
