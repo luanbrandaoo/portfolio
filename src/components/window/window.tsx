@@ -68,7 +68,13 @@ const Janela = ({programName, icon, children}) => {
       <Draggable handle=".handle" onStart={handleStartDragging} onStop={handleStopDragging}>
         <div ref={dragRef} className={`h-[32rem] w-[42rem] pointernone z-20 ${dragging ? 'dragWindow' : ''}`}
             style={{ position: 'absolute', top: `${initialPosition.y}px`, left: `${initialPosition.x}px` }}>
-          <div className="h-9 w-auto titleBox pointerauto handle"></div>
+          <div className="h-9 w-auto titleBox pointerauto handle">
+            <div className='flex flex-row gap-1 align-center justify-end m-px'>
+              <div className={"h-6 w-6 flex align-center justify-center"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
+              <div className={"h-6 w-6 flex align-center justify-center"} onMouseDown={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize}></div>
+              <div className={"h-6 w-6 flex align-center justify-center"} onMouseDown={handleMouseDownClose} onMouseUp={handleMouseUpClose}></div>
+            </div>
+          </div>
         </div>
       </Draggable>
       <div className={"h-[32rem] w-[42rem] bg-silver window z-10 flex flex-col"}
@@ -79,13 +85,13 @@ const Janela = ({programName, icon, children}) => {
             <span className='text-white font-ms font-normal text-start'>{programName}</span>
           </div>
           <div className='flex flex-row gap-1 align-center m-px'>
-            <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickMinimize ? 'windowButtonsClick' : ''}`} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}>
+            <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickMinimize ? 'windowButtonsClick' : ''}`}>
               <span className='text-black font-ms font-black text-window -m-1'>_</span>
             </div>
-            <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickMaximize ? 'windowButtonsClick' : ''}`} onMouseDown={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize}>
+            <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickMaximize ? 'windowButtonsClick' : ''}`}>
               <div className='border-black border-2 border-t-4 h-3 w-3 m-1'></div>
             </div>
-            <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickClose ? 'windowButtonsClick' : ''}`} onMouseDown={handleMouseDownClose} onMouseUp={handleMouseUpClose}>
+            <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickClose ? 'windowButtonsClick' : ''}`}>
               <span className='text-black font-ms font-black text-window -m-px'>X</span>
             </div>
           </div>
