@@ -77,8 +77,20 @@ const Janela = ({programName, icon, children}) => {
   return (
     <div>
       <div className='absolute z-30 top-0 left-0'>
-        <Rnd dragHandleClassName="handle" cancel=".cancel" default={{ x: 50, y: 50, width: 672, height: 512}} 
-          onDragStart={handleStartDragging} onDragStop={handleStopDragging} onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}>
+        <Rnd className="my-resizable-component" dragHandleClassName="handle" cancel=".cancel"
+          default={{ x: 50, y: 50, width: 672, height: 512}} 
+          onDragStart={handleStartDragging} onDragStop={handleStopDragging} 
+          onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}
+          resizeHandleStyles={{
+            top: {cursor:'ns-resize'},
+            bottom: {cursor:'ns-resize'},
+            left: {cursor: 'ew-resize'},
+            right: {cursor: 'ew-resize'},
+            topRight: {cursor: 'ne-resize'},
+            topLeft: {cursor: 'nw-resize'},
+            bottomRight: {cursor: 'se-resize'},
+            bottomLeft: {cursor: 'sw-resize'},
+          }}>
           <div ref={dragRef} className={`h-full w-full pointernone z-20 ${dragging ? 'dragWindow' : ''}`}>
             <div className="h-9 w-auto titleBox pointerauto handle">
               <div className='flex flex-row gap-1 align-center justify-end m-px'>

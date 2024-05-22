@@ -48,3 +48,7 @@
 .cancel{
     pointer-events: auto;
 }
+
+.my-resizable-component > .react-resizable-handle {
+    cursor: nwse-resize; /* Você pode mudar isso conforme necessário */
+  }
