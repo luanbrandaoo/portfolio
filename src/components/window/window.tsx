@@ -39,12 +39,23 @@ const Janela = ({programName, icon, children}) => {
   const [clickMaximize, setClickMaximize] = useState(false);
   const [clickClose, setClickClose] = useState(false);
 
+  const handleGlobalMouseUp = () => {
+    setClickMinimize(false);
+    setClickMaximize(false);
+    setClickClose(false);
+  };
+  
+  useEffect(() => {
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+  }, []);
+
   const handleMouseDownMinimize = () => {
     setClickMinimize(true);
   };
 
   const handleMouseUpMinimize = () => {
     setClickMinimize(false);
+    console.log('minimize');
   };
 
   const handleMouseDownMaximize = () => {
@@ -65,14 +76,14 @@ const Janela = ({programName, icon, children}) => {
 
   return (
     <div>
-      <Draggable handle=".handle" onStart={handleStartDragging} onStop={handleStopDragging}>
+      <Draggable handle=".handle" cancel='.cancel' onStart={handleStartDragging} onStop={handleStopDragging}>
         <div ref={dragRef} className={`h-[32rem] w-[42rem] pointernone z-20 ${dragging ? 'dragWindow' : ''}`}
             style={{ position: 'absolute', top: `${initialPosition.y}px`, left: `${initialPosition.x}px` }}>
           <div className="h-9 w-auto titleBox pointerauto handle">
             <div className='flex flex-row gap-1 align-center justify-end m-px'>
-              <div className={"h-6 w-6 flex align-center justify-center"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
-              <div className={"h-6 w-6 flex align-center justify-center"} onMouseDown={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize}></div>
-              <div className={"h-6 w-6 flex align-center justify-center"} onMouseDown={handleMouseDownClose} onMouseUp={handleMouseUpClose}></div>
+              <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
+              <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize}></div>
+              <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownClose} onMouseUp={handleMouseUpClose}></div>
             </div>
           </div>
         </div>
