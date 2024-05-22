@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import Draggable from 'react-draggable';
+import {Rnd} from 'react-rnd';
 
 import './window.css';
 
@@ -76,18 +76,19 @@ const Janela = ({programName, icon, children}) => {
 
   return (
     <div>
-      <Draggable handle=".handle" cancel='.cancel' onStart={handleStartDragging} onStop={handleStopDragging}>
-        <div ref={dragRef} className={`h-[32rem] w-[42rem] pointernone z-20 ${dragging ? 'dragWindow' : ''}`}
-            style={{ position: 'absolute', top: `${initialPosition.y}px`, left: `${initialPosition.x}px` }}>
-          <div className="h-9 w-auto titleBox pointerauto handle">
-            <div className='flex flex-row gap-1 align-center justify-end m-px'>
-              <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
-              <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize}></div>
-              <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownClose} onMouseUp={handleMouseUpClose}></div>
+      <div className='absolute z-30 top-0 left-0'>
+        <Rnd dragHandleClassName="handle" cancel=".cancel" default={{ x: 50, y: 50, width: 672, height: 512}} onDragStart={handleStartDragging} onDragStop={handleStopDragging}>
+          <div ref={dragRef} className={`h-[32rem] w-[42rem] pointernone z-20 ${dragging ? 'dragWindow' : ''}`}>
+            <div className="h-9 w-auto titleBox pointerauto handle">
+              <div className='flex flex-row gap-1 align-center justify-end m-px'>
+                <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
+                <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize}></div>
+                <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownClose} onMouseUp={handleMouseUpClose}></div>
+              </div>
             </div>
           </div>
-        </div>
-      </Draggable>
+        </Rnd>
+      </div>
       <div className={"h-[32rem] w-[42rem] bg-silver window z-10 flex flex-col"}
           style={{ position: 'absolute', top: `${program.position.y}px`, left: `${program.position.x}px` }}>
         <div className="h-9 w-auto titleBox bg-windowblue flex flex-row justify-between">

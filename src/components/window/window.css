@@ -44,3 +44,7 @@
     margin: 2px;
     padding: 5px 7px 5px 7px;
 }
+
+.cancel{
+    pointer-events: auto;
+}
