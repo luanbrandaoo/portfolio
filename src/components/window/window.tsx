@@ -19,6 +19,7 @@ const Janela = ({programName, icon, children}) => {
       setInitialPosition(program.position);
   }, []);
 
+  const [size, setSize] = useState({ x: 672, y: 512 });
 
   const dragRef = useRef(null);
   const [dragging, setDragging] = useState(false);
@@ -29,8 +30,8 @@ const Janela = ({programName, icon, children}) => {
 
   const handleStopDragging = () => {
     const drag = dragRef.current.getBoundingClientRect();
-    console.log(drag.left, drag.top);
     setPosition(programName, drag.left, drag.top);
+    setSize({x: drag.width, y: drag.height});
     setDragging(false);
   };
 
@@ -55,7 +56,6 @@ const Janela = ({programName, icon, children}) => {
 
   const handleMouseUpMinimize = () => {
     setClickMinimize(false);
-    console.log('minimize');
   };
 
   const handleMouseDownMaximize = () => {
@@ -70,15 +70,16 @@ const Janela = ({programName, icon, children}) => {
     setClickClose(true);
   };
 
-  const handleMouseUpClose  = () => {
+  const handleMouseUpClose = () => {
     setClickClose(false);
   };
 
   return (
     <div>
       <div className='absolute z-30 top-0 left-0'>
-        <Rnd dragHandleClassName="handle" cancel=".cancel" default={{ x: 50, y: 50, width: 672, height: 512}} onDragStart={handleStartDragging} onDragStop={handleStopDragging}>
-          <div ref={dragRef} className={`h-[32rem] w-[42rem] pointernone z-20 ${dragging ? 'dragWindow' : ''}`}>
+        <Rnd dragHandleClassName="handle" cancel=".cancel" default={{ x: 50, y: 50, width: 672, height: 512}} 
+          onDragStart={handleStartDragging} onDragStop={handleStopDragging} onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}>
+          <div ref={dragRef} className={`h-full w-full pointernone z-20 ${dragging ? 'dragWindow' : ''}`}>
             <div className="h-9 w-auto titleBox pointerauto handle">
               <div className='flex flex-row gap-1 align-center justify-end m-px'>
                 <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
@@ -89,8 +90,9 @@ const Janela = ({programName, icon, children}) => {
           </div>
         </Rnd>
       </div>
-      <div className={"h-[32rem] w-[42rem] bg-silver window z-10 flex flex-col"}
-          style={{ position: 'absolute', top: `${program.position.y}px`, left: `${program.position.x}px` }}>
+      <div className={"bg-silver window z-10 flex flex-col"}
+          style={{ position: 'absolute', top: `${program.position.y}px`, left: `${program.position.x}px`,
+          width: `${size.x}px`, height: `${size.y}px`}}>
         <div className="h-9 w-auto titleBox bg-windowblue flex flex-row justify-between">
           <div className='flex flex-row gap-2 align-center'>
             <img src={icon} className="h-6"></img>
