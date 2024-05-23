@@ -16,7 +16,6 @@ const ProgramTaskbar = ({programName, icon}) => {
 
     const handleMouseDown = () => {
         setClick(true);
-        console.log('click');
     };
 
     const handleMouseUp = () => {
