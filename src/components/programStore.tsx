@@ -14,10 +14,17 @@ export const componentMap = {
   "After Effects": AfterEffects
 }
 
+export const stateE = {
+  MINIMIZED: 0,
+  UNFOCUSED: 1,
+  FOCUSED: 2,
+  MAXIMIZED: 3,
+}
+
 const useProgramStore = create((set) => ({
   programs: [],
   addProgram: (program) => set((state) => ({
-    programs: [...state.programs, { ...program, position: { x: 50, y: 50 }, size: { width: 500, height: 500 } }]
+    programs: [...state.programs, { ...program, position: {x: 0, y: 0}, size: {width: 0, height: 0}, state: stateE.FOCUSED}]
   })),
   removeProgram: (programName) => set((state) => ({
     programs: state.programs.filter((p) => p.programName !== programName)
@@ -31,7 +38,12 @@ const useProgramStore = create((set) => ({
     programs: state.programs.map((program) =>
       program.programName === programName ? { ...program, size: { width, height } } : program
     )
+  })),
+  setState: (programName, programState) => set((state) => ({
+    programs: state.programs.map((program) =>
+      program.programName === programName ? { ...program, ...programState } : program
+    )
   }))
-}))
+}));
 
 export default useProgramStore;

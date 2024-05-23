@@ -3,21 +3,21 @@ import {Rnd} from 'react-rnd';
 
 import './window.css';
 
-import useProgramStore from '../programStore';
+import useProgramStore, {stateE} from '../programStore';
 
-const Janela = ({programName, icon, children}) => {
-  const { programs, setPosition, setSize } = useProgramStore(state => ({
+const Window = ({programName, icon, initialPosition, initialSize, initialState, children}) => {
+  const { programs, setPosition, setSize, setState } = useProgramStore(state => ({
     programs: state.programs,
     setPosition: state.setPosition,
-    setSize: state.setSize
+    setSize: state.setSize,
+    setState: state.setState
   }));
 
   const program = programs.find(p => p.programName === programName);
-
-
-  const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
   useEffect(() => {
-      setInitialPosition(program.position);
+    setPosition(programName, initialPosition.x, initialPosition.y);
+    setSize(programName, initialSize.width, initialSize.height);
+    setState(programName, initialState);
   }, []);
 
   const dragRef = useRef(null);
@@ -77,7 +77,7 @@ const Janela = ({programName, icon, children}) => {
     <div>
       <div className='absolute z-30 top-0 left-0'>
         <Rnd className="my-resizable-component" dragHandleClassName="handle" cancel=".cancel"
-          default={{ x: program.position.x, y: program.position.y, width: program.size.width, height: program.size.height}} 
+          default={{ x: initialPosition.x, y: initialPosition.y, width: initialSize.width, height: initialSize.height}} 
           onDragStart={handleStartDragging} onDragStop={handleStopDragging} 
           onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}
           resizeHandleStyles={{
@@ -129,4 +129,4 @@ const Janela = ({programName, icon, children}) => {
   );
 }
 
-export default Janela;
+export default Window;
