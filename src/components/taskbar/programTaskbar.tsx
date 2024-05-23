@@ -1,12 +1,22 @@
 import { useState } from 'react';
 import './taskbarComponents.css';
 
-const ProgramTaskbar = (props) => {
+import useProgramStore, {stateE} from '../programStore';
+
+const ProgramTaskbar = ({programName, icon}) => {
+    const { programs, setState } = useProgramStore(state => ({
+        programs: state.programs,
+        setState: state.setState
+      }));
+    
+    const program = programs.find(p => p.programName === programName);
+
     const [click, setClick] = useState(false);
     const [active, setActive] = useState(false);
 
     const handleMouseDown = () => {
         setClick(true);
+        console.log('click');
     };
 
     const handleMouseUp = () => {
@@ -18,15 +28,15 @@ const ProgramTaskbar = (props) => {
 
     return (
         <div
-            className={`h-8 programTaskbar flex align-center justify-center px-2 ${
-                click ? 'programTaskbarClick' : ''
-            } ${active ? 'programTaskbarActive' : ''}`}
+            className={`h-8 programTaskbar flex align-center justify-center px-2 
+            ${program.state === stateE.FOCUSED && !click ? 'programTaskbarActive' : ''}
+            ${click ? 'programTaskbarClick' : ''} `}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
         >
-            <img src={props.icon} className="h-6 mt-1" alt="Program Icon"></img>
+            <img src={icon} className="h-6 mt-1" alt="Program Icon"></img>
             <span className="text-black font-ms font-normal text-start mt-1 ml-1">
-                {props.programName}
+                {programName}
             </span>
         </div>
     );
