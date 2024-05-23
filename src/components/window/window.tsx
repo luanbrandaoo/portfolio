@@ -14,6 +14,8 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
   }));
 
   const program = programs.find(p => p.programName === programName);
+  const removeProgram = useProgramStore((state) => state.removeProgram);
+
   useEffect(() => {
     setPosition(programName, initialPosition.x, initialPosition.y);
     setSize(programName, initialSize.width, initialSize.height);
@@ -71,6 +73,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
 
   const handleMouseUpClose = () => {
     setClickClose(false);
+    removeProgram(programName);
   };
 
   return (
