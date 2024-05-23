@@ -17,7 +17,7 @@ export const componentMap = {
 const useProgramStore = create((set) => ({
   programs: [],
   addProgram: (program) => set((state) => ({
-    programs: [...state.programs, { ...program, position: { x: 50, y: 50 } }]
+    programs: [...state.programs, { ...program, position: { x: 50, y: 50 }, size: { width: 500, height: 500 } }]
   })),
   removeProgram: (programName) => set((state) => ({
     programs: state.programs.filter((p) => p.programName !== programName)
@@ -25,6 +25,11 @@ const useProgramStore = create((set) => ({
   setPosition: (programName, x, y) => set((state) => ({
     programs: state.programs.map((program) =>
       program.programName === programName ? { ...program, position: { x, y } } : program
+    )
+  })),
+  setSize: (programName, width, height) => set((state) => ({
+    programs: state.programs.map((program) =>
+      program.programName === programName ? { ...program, size: { width, height } } : program
     )
   }))
 }))

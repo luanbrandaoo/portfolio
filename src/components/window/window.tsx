@@ -6,9 +6,10 @@ import './window.css';
 import useProgramStore from '../programStore';
 
 const Janela = ({programName, icon, children}) => {
-  const { programs, setPosition } = useProgramStore(state => ({
+  const { programs, setPosition, setSize } = useProgramStore(state => ({
     programs: state.programs,
-    setPosition: state.setPosition
+    setPosition: state.setPosition,
+    setSize: state.setSize
   }));
 
   const program = programs.find(p => p.programName === programName);
@@ -18,8 +19,6 @@ const Janela = ({programName, icon, children}) => {
   useEffect(() => {
       setInitialPosition(program.position);
   }, []);
-
-  const [size, setSize] = useState({ x: 672, y: 512 });
 
   const dragRef = useRef(null);
   const [dragging, setDragging] = useState(false);
@@ -31,7 +30,7 @@ const Janela = ({programName, icon, children}) => {
   const handleStopDragging = () => {
     const drag = dragRef.current.getBoundingClientRect();
     setPosition(programName, drag.left, drag.top);
-    setSize({x: drag.width, y: drag.height});
+    setSize(programName, drag.width, drag.height);
     setDragging(false);
   };
 
@@ -78,7 +77,7 @@ const Janela = ({programName, icon, children}) => {
     <div>
       <div className='absolute z-30 top-0 left-0'>
         <Rnd className="my-resizable-component" dragHandleClassName="handle" cancel=".cancel"
-          default={{ x: 50, y: 50, width: 672, height: 512}} 
+          default={{ x: program.position.x, y: program.position.y, width: program.size.width, height: program.size.height}} 
           onDragStart={handleStartDragging} onDragStop={handleStopDragging} 
           onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}
           resizeHandleStyles={{
@@ -104,7 +103,7 @@ const Janela = ({programName, icon, children}) => {
       </div>
       <div className={"bg-silver window z-10 flex flex-col"}
           style={{ position: 'absolute', top: `${program.position.y}px`, left: `${program.position.x}px`,
-          width: `${size.x}px`, height: `${size.y}px`}}>
+          width: `${program.size.width}px`, height: `${program.size.height}px`}}>
         <div className="h-9 w-auto titleBox bg-windowblue flex flex-row justify-between">
           <div className='flex flex-row gap-2 align-center'>
             <img src={icon} className="h-6"></img>
