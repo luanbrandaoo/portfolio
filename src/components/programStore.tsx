@@ -1,4 +1,5 @@
 import {create} from 'zustand';
+import { useState, useEffect } from 'react';
 
 import Resume from './program/resume';
 import Mail from './program/mail';
@@ -17,21 +18,26 @@ export const componentMap = {
 export const stateE = {
   MINIMIZED: 0,
   UNFOCUSED: 1,
-  FOCUSED: 2,
-  MAXIMIZED: 3,
+  FOCUSED: 2
 }
 
 const useProgramStore = create((set) => ({
   programs: [],
   addProgram: (program) => set((state) => ({
-    programs: [...state.programs, { ...program, position: {x: 0, y: 0}, size: {width: 0, height: 0}, state: stateE.FOCUSED}]
+    programs: [...state.programs, { ...program, 
+      position: {x: 0, y: 0}, size: {width: 0, height: 0}, state: stateE.FOCUSED}]
   })),
   removeProgram: (programName) => set((state) => ({
     programs: state.programs.filter((p) => p.programName !== programName)
   })),
+  minimizeProgram: (programName) => set((state) => ({
+    programs: state.programs.map((program) =>
+      program.programName === programName ? { ...program, state: stateE.MINIMIZED} : program
+    )
+  })),
   setPosition: (programName, x, y) => set((state) => ({
     programs: state.programs.map((program) =>
-      program.programName === programName ? { ...program, position: { x, y } } : program
+      program.programName === programName ? { ...program, position: {x: x, y: y} } : program
     )
   })),
   setSize: (programName, width, height) => set((state) => ({
@@ -45,5 +51,6 @@ const useProgramStore = create((set) => ({
     )
   }))
 }));
+
 
 export default useProgramStore;
