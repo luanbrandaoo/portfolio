@@ -51,6 +51,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
   
   useEffect(() => {
     window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => {window.removeEventListener('mouseup', handleGlobalMouseUp)};
   }, []);
 
   const handleMouseDownMinimize = () => {
