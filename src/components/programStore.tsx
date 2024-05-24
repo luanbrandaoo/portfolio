@@ -47,7 +47,7 @@ const useProgramStore = create((set) => ({
   })),
   setState: (programName, programState) => set((state) => ({
     programs: state.programs.map((program) =>
-      program.programName === programName ? { ...program, ...programState } : program
+      program.programName === programName ? { ...program, state: programState } : program
     )
   }))
 }));

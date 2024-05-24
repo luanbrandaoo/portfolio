@@ -12,7 +12,6 @@ const ProgramTaskbar = ({programName, icon}) => {
     const program = programs.find(p => p.programName === programName);
 
     const [click, setClick] = useState(false);
-    const [active, setActive] = useState(false);
 
     const handleMouseDown = () => {
         setClick(true);
@@ -20,8 +19,11 @@ const ProgramTaskbar = ({programName, icon}) => {
 
     const handleMouseUp = () => {
         setClick(false);
-        if (!active) {
-            setActive(true);
+        if (program.state === stateE.FOCUSED) {
+            setState(programName, stateE.MINIMIZED);
+        }
+        else{
+            setState(programName, stateE.FOCUSED);
         }
     };
 
