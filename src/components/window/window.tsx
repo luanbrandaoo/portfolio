@@ -68,6 +68,8 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
 
   const handleMouseUpMaximize  = () => {
     setClickMaximize(false);
+    setPosition(programName, 0, 0);
+    setSize(programName, window.innerWidth, window.innerHeight);
   };
 
   const handleMouseDownClose = () => {
@@ -86,6 +88,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
           <Rnd className="my-resizable-component" dragHandleClassName="handle" cancel=".cancel"
             default={{ x: initialPosition.x, y: initialPosition.y, width: initialSize.width, height: initialSize.height}} 
             position={{ x: program.position.x, y: program.position.y }}
+            size={{ width: program.size.width, height: program.size.height }}
             onDragStart={handleStartDragging} onDragStop={handleStopDragging} 
             onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}
             resizeHandleStyles={{
