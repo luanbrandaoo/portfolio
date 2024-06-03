@@ -6,10 +6,9 @@ import './window.css';
 import useProgramStore, {stateE} from '../programStore';
 
 const Window = ({programName, icon, initialPosition, initialSize, initialState, children}) => {
-  const { programs, removeProgram, minimizeProgram, setPosition, setSize, setState } = useProgramStore(state => ({
+  const { programs, removeProgram, setPosition, setSize, setState } = useProgramStore(state => ({
     programs: state.programs,
     removeProgram: state.removeProgram,
-    minimizeProgram: state.minimizeProgram,
     setPosition: state.setPosition,
     setSize: state.setSize,
     setState: state.setState
@@ -60,7 +59,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
 
   const handleMouseUpMinimize = () => {
     setClickMinimize(false);
-    minimizeProgram(programName);
+    setState(programName, stateE.MINIMIZED);
   };
 
   const handleMouseDownMaximize = () => {

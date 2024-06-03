@@ -30,11 +30,6 @@ const useProgramStore = create((set) => ({
   removeProgram: (programName) => set((state) => ({
     programs: state.programs.filter((p) => p.programName !== programName)
   })),
-  minimizeProgram: (programName) => set((state) => ({
-    programs: state.programs.map((program) =>
-      program.programName === programName ? { ...program, state: stateE.MINIMIZED} : program
-    )
-  })),
   setPosition: (programName, x, y) => set((state) => ({
     programs: state.programs.map((program) =>
       program.programName === programName ? { ...program, position: {x: x, y: y} } : program
