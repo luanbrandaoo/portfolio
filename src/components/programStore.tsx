@@ -24,11 +24,7 @@ export const stateE = {
 const windowIndexList = {};
 
 function windowIndexFocus(programName, state) {
-  if (typeof programName !== 'string') {
-    console.error('programName should be a string:', programName);
-    programName = String(programName); // Convert to string if not already
-  }
-
+  
   if (state !== stateE.FOCUSED) {
     return state;
   }
@@ -49,38 +45,33 @@ function windowIndexFocus(programName, state) {
     windowIndexList[programName] = maxIndex + 1;
   }
 
-  // remove focus state from other programs
-  for (let name in windowIndexList) {
-    if (name !== programName) {
-      useProgramStore.setState((state) => ({
-        programs: state.programs.map((program) =>
-          program.programName === name ? { ...program, state: stateE.UNFOCUSED } : program
-        )
-      }));
-    }
-  }
-
   // debugging
   console.log('windowIndexList:', JSON.stringify(windowIndexList, null, 2));
 
   return state;
 }
 
-const useProgramStore = create((set) => ({
+const useProgramStore = create((set, get) => ({
   programs: [],
-  addProgram: (program) => set((state) => {
-    if (state.programs.some((p) => p.programName === program.programName)) {
-      return state; // prevent duplicate programs
+  addProgram: (program) => {
+    const state = get();
+    const existingProgram = state.programs.find((p) => p.programName === program.programName);
+    if (existingProgram) {
+      useProgramStore.getState().setState(program.programName, stateE.FOCUSED);
+      return state;
     }
-    return {
-      programs: [...state.programs, { 
-        ...program, 
-        position: { x: 0, y: 0 }, 
-        size: { width: 0, height: 0 }, 
-        state: windowIndexFocus(program.programName, stateE.FOCUSED) 
-      }]
-    };
-  }),
+    return set((state) => ({
+      programs: [
+        ...state.programs,
+        {
+          ...program,
+          position: { x: 0, y: 0 },
+          size: { width: 0, height: 0 },
+          state: windowIndexFocus(program.programName, stateE.FOCUSED)
+        }
+      ]
+    }));
+  },
   removeProgram: (programName) => set((state) => ({
     programs: state.programs.filter((p) => p.programName !== programName)
   })),
@@ -94,12 +85,18 @@ const useProgramStore = create((set) => ({
       program.programName === programName ? { ...program, size: { width, height } } : program
     )
   })),
-  setState: (programName, programState) => set((state) => ({
-    programs: state.programs.map((program) =>
-      program.programName === programName ? { ...program, state: windowIndexFocus(program.programName, programState) } : program
-    )
-  }))
-}));
+  setState: (programName, programState) => set((state) => {
+    const updatedPrograms = state.programs.map((program) => {
+      if (program.programName === programName) {
+        return { ...program, state: windowIndexFocus(programName, programState) };
+      } else if (programState === stateE.FOCUSED && program.state === stateE.FOCUSED) {
+        return { ...program, state: stateE.UNFOCUSED };
+      }
+      return program;
+    });
 
+    return { programs: updatedPrograms };
+  })
+}));
 
 export default useProgramStore;
