@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 import { useState, useEffect } from 'react';
 
 import Resume from './program/resume';
@@ -21,12 +21,66 @@ export const stateE = {
   FOCUSED: 2
 }
 
+const windowIndexList = {};
+
+function windowIndexFocus(programName, state) {
+  if (typeof programName !== 'string') {
+    console.error('programName should be a string:', programName);
+    programName = String(programName); // Convert to string if not already
+  }
+
+  if (state !== stateE.FOCUSED) {
+    return state;
+  }
+
+  const maxIndex = Math.max(0, ...Object.values(windowIndexList));
+
+  if (programName in windowIndexList) {
+    const originalIndex = windowIndexList[programName];
+
+    windowIndexList[programName] = maxIndex + 1;
+
+    for (let key in windowIndexList) {
+      if (windowIndexList[key] > originalIndex) {
+        windowIndexList[key]--;
+      }
+    }
+  } else {
+    windowIndexList[programName] = maxIndex + 1;
+  }
+
+  // remove focus state from other programs
+  for (let name in windowIndexList) {
+    if (name !== programName) {
+      useProgramStore.setState((state) => ({
+        programs: state.programs.map((program) =>
+          program.programName === name ? { ...program, state: stateE.UNFOCUSED } : program
+        )
+      }));
+    }
+  }
+
+  // debugging
+  console.log('windowIndexList:', JSON.stringify(windowIndexList, null, 2));
+
+  return state;
+}
+
 const useProgramStore = create((set) => ({
   programs: [],
-  addProgram: (program) => set((state) => ({
-    programs: [...state.programs, { ...program, 
-      position: {x: 0, y: 0}, size: {width: 0, height: 0}, state: stateE.FOCUSED}]
-  })),
+  addProgram: (program) => set((state) => {
+    if (state.programs.some((p) => p.programName === program.programName)) {
+      return state; // prevent duplicate programs
+    }
+    return {
+      programs: [...state.programs, { 
+        ...program, 
+        position: { x: 0, y: 0 }, 
+        size: { width: 0, height: 0 }, 
+        state: windowIndexFocus(program.programName, stateE.FOCUSED) 
+      }]
+    };
+  }),
   removeProgram: (programName) => set((state) => ({
     programs: state.programs.filter((p) => p.programName !== programName)
   })),
@@ -42,7 +96,7 @@ const useProgramStore = create((set) => ({
   })),
   setState: (programName, programState) => set((state) => ({
     programs: state.programs.map((program) =>
-      program.programName === programName ? { ...program, state: programState } : program
+      program.programName === programName ? { ...program, state: windowIndexFocus(program.programName, programState) } : program
     )
   }))
 }));
