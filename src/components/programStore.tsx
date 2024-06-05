@@ -51,6 +51,11 @@ const useProgramStore = create((set, get) => ({
       program.programName === programName ? { ...program, position: { x: x, y: y } } : program
     )
   })),
+  setMinimumSize: (programName, width, height) => set((state) => ({
+    programs: state.programs.map((program) =>
+      program.programName === programName ? { ...program, minimumSize: { width: width, height: height } } : program
+    )
+  })),
   setSize: (programName, width, height) => set((state) => ({
     programs: state.programs.map((program) =>
       program.programName === programName ? { ...program, size: { width: width, height: height } } : program
@@ -81,12 +86,18 @@ const useProgramStore = create((set, get) => ({
     }
   }),
   updateGlobalSize: (newWidth, newHeight, oldWidth, oldHeight) => {
-    const updatedPrograms = get().programs.map(program => ({
-      ...program,
-      position: { x: ((program.position.x*newWidth)/oldWidth), y: ((program.position.y*newHeight)/oldHeight) },
-      size: { width: ((program.size.width*newWidth)/oldWidth), height: ((program.size.height*newHeight)/oldHeight) }
-    }));
-    console.log('updatedPrograms: ', updatedPrograms);
+    const updatedPrograms = get().programs.map(program => {
+      return {
+        ...program,
+        position: { 
+          x: ((program.position.x * newWidth) / oldWidth), 
+          y: ((program.position.y * newHeight) / oldHeight),
+        },
+        size: {
+          width: Math.max(program.minimumSize.width, program.size.width * (newWidth / oldWidth)), 
+          height: Math.max(program.minimumSize.height, program.size.height * (newHeight / oldHeight))
+        }
+      }});
     set({ programs: updatedPrograms });
   }
 }));

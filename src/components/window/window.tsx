@@ -5,11 +5,12 @@ import './window.css';
 
 import useProgramStore, {stateE} from '../programStore';
 
-const Window = ({programName, icon, initialPosition, initialSize, initialState, children}) => {
-  const { programs, removeProgram, setPosition, setSize, setState } = useProgramStore(state => ({
+const Window = ({programName, icon, initialPosition, initialSize, minimumSize, initialState, children}) => {
+  const { programs, removeProgram, setPosition, setMinimumSize, setSize, setState } = useProgramStore(state => ({
     programs: state.programs,
     removeProgram: state.removeProgram,
     setPosition: state.setPosition,
+    setMinimumSize: state.setMinimumSize,
     setSize: state.setSize,
     setState: state.setState
   }));
@@ -22,6 +23,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
     setPosition(programName, initialPosition.x, initialPosition.y);
     setSize(programName, initialSize.width, initialSize.height);
     setState(programName, initialState);
+    setMinimumSize(programName, minimumSize.width, minimumSize.height);
   }, []);
   
 
@@ -99,6 +101,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
             position={{ x: program.position.x, y: program.position.y }}
             size={{ width: program.size.width, height: program.size.height }}
             maxHeight={window.innerHeight} maxWidth={window.innerWidth}
+            minHeight={minimumSize.height} minWidth={minimumSize.width}
             onDragStart={handleStartDragging} onDragStop={handleStopDragging}
             onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}
             resizeHandleStyles={{
@@ -113,10 +116,10 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
             }}>
             <div ref={dragRef} className={`h-full w-full pointer-none ${dragging ? 'dragWindow' : ''}`} style={{ zIndex: index + 2 }}>
               <div className="h-9 w-auto titleBox pointerauto handle">
-                <div className='flex flex-row gap-1 align-center justify-end m-px'>
-                  <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
-                  <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize}></div>
-                  <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownClose} onMouseUp={handleMouseUpClose}></div>
+                <div className='flex flex-row gap-1 align-center justify-end m-px overflow-clip'>
+                  <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
+                  <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize}></div>
+                  <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownClose} onMouseUp={handleMouseUpClose}></div>
                 </div>
               </div>
             </div>

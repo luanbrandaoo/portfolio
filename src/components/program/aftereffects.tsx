@@ -5,7 +5,10 @@ import {stateE} from '../programStore';
 
 const Aftereffects = () => {
   return (
-    <Window programName={'After Effects'} icon={aftereffectsLogo} initialPosition={{x: 50, y: 50}} initialSize={{width: 500, height: 500}} initialState={stateE.FOCUSED}>
+    <Window programName={'After Effects'} icon={aftereffectsLogo} 
+      initialPosition={{x: 50, y: 50}} initialSize={{width: 500, height: 500}} 
+      minimumSize={{width: 280, height: 150}}
+      initialState={stateE.FOCUSED}>
         <span>After Effects</span>
     </Window>
   );
