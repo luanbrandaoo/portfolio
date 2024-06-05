@@ -30,7 +30,7 @@ const useProgramStore = create((set, get) => ({
       useProgramStore.getState().setState(program.programName, stateE.FOCUSED);
       return state;
     }
-    return set((state) => ({
+    set((state) => ({
       programs: [
         ...state.programs,
         {
@@ -48,7 +48,7 @@ const useProgramStore = create((set, get) => ({
   })),
   setPosition: (programName, x, y) => set((state) => ({
     programs: state.programs.map((program) =>
-      program.programName === programName ? { ...program, position: {x: x, y: y} } : program
+      program.programName === programName ? { ...program, position: { x: x, y: y } } : program
     )
   })),
   setSize: (programName, width, height) => set((state) => ({
@@ -63,21 +63,10 @@ const useProgramStore = create((set, get) => ({
   })),
   setState: (programName, programState) => set((state) => {
     if (programState === stateE.FOCUSED) {
-      let updatedPrograms = state.programs.map((program) => {
+      const maxIndex = Math.max(...state.programs.map(p => p.index), 0);
+      const updatedPrograms = state.programs.map((program) => {
         if (program.programName === programName) {
-          let filteredPrograms = state.programs.filter(p => p.index !== undefined).map(p => p.index);
-          let maxIndex = filteredPrograms.length > 0 ? Math.max(...filteredPrograms) : 0;
-          let oldIndex = program.index;
-
-          if (oldIndex !== maxIndex) {
-            program.index = maxIndex + 1;
-            state.programs.forEach(p => {
-              if (p.index > oldIndex) {
-                p.index -= 1;
-              }
-            });
-          }
-          return { ...program, state: stateE.FOCUSED };
+          return { ...program, state: stateE.FOCUSED, index: maxIndex + 1 };
         } else if (program.state === stateE.FOCUSED) {
           return { ...program, state: stateE.UNFOCUSED };
         }
@@ -85,11 +74,10 @@ const useProgramStore = create((set, get) => ({
       });
       return { programs: updatedPrograms };
     } else {
-      return {
-        programs: state.programs.map((program) => (
-          program.programName === programName ? { ...program, state: programState } : program
-        ))
-      };
+      const updatedPrograms = state.programs.map((program) => (
+        program.programName === programName ? { ...program, state: programState } : program
+      ));
+      return { programs: updatedPrograms };
     }
   })
 }));
