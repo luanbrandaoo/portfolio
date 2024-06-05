@@ -8,18 +8,19 @@ import mailLogo from '../../assets/mail.png';
 import VSLogo from '../../assets/vscode.png'; 
 import afterLogo from '../../assets/af.png'; 
 
-import useScreenStore from '../screenStore';
 import useProgramStore, {componentMap} from '../programStore';
 
 
 const Desktop = () => {
-  const { size, updateScreenSize } = useScreenStore();
   const programs = useProgramStore((state) => state.programs);
+  let oldSize = {width: window.innerWidth, height: window.innerHeight};
+  let newSize = {width: window.innerWidth, height: window.innerHeight};
 
   useEffect(() => {
     const handleResize = () => {
-        updateScreenSize(window.innerWidth, window.innerHeight);
-        console.log("resized");
+        newSize = {width: window.innerWidth, height: window.innerHeight};
+        useProgramStore.getState().updateGlobalSize(newSize.width, newSize.height, oldSize.width, oldSize.height);
+        oldSize = newSize;
     };
 
     window.addEventListener('resize', handleResize);

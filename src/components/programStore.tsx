@@ -53,7 +53,7 @@ const useProgramStore = create((set, get) => ({
   })),
   setSize: (programName, width, height) => set((state) => ({
     programs: state.programs.map((program) =>
-      program.programName === programName ? { ...program, size: { width, height } } : program
+      program.programName === programName ? { ...program, size: { width: width, height: height } } : program
     )
   })),
   setIndex: (programName, programIndex) => set((state) => ({
@@ -79,7 +79,16 @@ const useProgramStore = create((set, get) => ({
       ));
       return { programs: updatedPrograms };
     }
-  })
+  }),
+  updateGlobalSize: (newWidth, newHeight, oldWidth, oldHeight) => {
+    const updatedPrograms = get().programs.map(program => ({
+      ...program,
+      position: { x: ((program.position.x*newWidth)/oldWidth), y: ((program.position.y*newHeight)/oldHeight) },
+      size: { width: ((program.size.width*newWidth)/oldWidth), height: ((program.size.height*newHeight)/oldHeight) }
+    }));
+    console.log('updatedPrograms: ', updatedPrograms);
+    set({ programs: updatedPrograms });
+  }
 }));
 
 export default useProgramStore;
