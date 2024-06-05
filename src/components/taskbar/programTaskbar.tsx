@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './taskbarComponents.css';
 
 import useProgramStore, {stateE} from '../programStore';
@@ -25,6 +25,15 @@ const ProgramTaskbar = ({programName, icon}) => {
         else{
             setState(programName, stateE.FOCUSED);
         }
+    };
+
+    useEffect(() => {
+        window.addEventListener('mouseup', handleGlobalMouseUp);
+        return () => {window.removeEventListener('mouseup', handleGlobalMouseUp)};
+      }, []);
+
+    const handleGlobalMouseUp = () => {
+        setClick(false);
     };
 
     return (
