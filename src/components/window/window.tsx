@@ -20,10 +20,12 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
   const index = program.index * 100;
 
   useEffect(() => {
-    setPosition(programName, initialPosition.x, initialPosition.y);
-    setSize(programName, initialSize.width, initialSize.height);
-    setState(programName, initialState);
-    setMinimumSize(programName, minimumSize.width, minimumSize.height);
+    if (program.size.width === 0){
+      setPosition(programName, initialPosition.x, initialPosition.y);
+      setSize(programName, initialSize.width, initialSize.height);
+      setState(programName, initialState);
+      setMinimumSize(programName, minimumSize.width, minimumSize.height);
+    }
   }, []);
   
 
