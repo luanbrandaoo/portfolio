@@ -28,6 +28,8 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
     }
   }, []);
   
+  const [maximized, setMaximized] = useState(false);
+  const oldValues = useRef({x: 0, y: 0, width: 0, height: 0, screenWidth: 0, screenHeight: 0});
 
   const dragRef = useRef(null);
   const [dragging, setDragging] = useState(false);
@@ -41,6 +43,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
     const drag = dragRef.current.getBoundingClientRect();
     setPosition(programName, drag.left, drag.top);
     setSize(programName, drag.width, drag.height);
+    setMaximized(false);
     setDragging(false);
   };
 
@@ -75,8 +78,25 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
 
   const handleMouseUpMaximize  = () => {
     setClickMaximize(false);
-    setPosition(programName, 0, 0);
-    setSize(programName, window.innerWidth, window.innerHeight);
+    if (maximized){
+      setPosition(programName,
+        (oldValues.current.x*window.innerWidth)/oldValues.current.screenWidth, 
+        (oldValues.current.y*window.innerHeight)/oldValues.current.screenHeight);
+      setSize(programName,
+        Math.max((oldValues.current.width*window.innerWidth)/oldValues.current.screenWidth, minimumSize.width),
+        Math.max((oldValues.current.height*window.innerHeight)/oldValues.current.screenHeight), minimumSize.height);
+      setMaximized(false);
+    }
+    else{
+      oldValues.current = {
+        x: program.position.x, y: program.position.y, 
+        width: program.size.width, height: program.size.height,
+        screenWidth: window.innerWidth, screenHeight: window.innerHeight,
+      };
+      setPosition(programName, 0, 0);
+      setSize(programName, window.innerWidth, window.innerHeight);
+      setMaximized(true);
+    }
   };
 
   const handleMouseDownClose = () => {
@@ -141,7 +161,14 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
                 <span className='text-black font-ms font-black text-window -m-1'>_</span>
               </div>
               <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickMaximize ? 'windowButtonsClick' : ''}`}>
-                <div className='border-black border-2 border-t-4 h-3 w-3 m-1'></div>
+                {maximized ? (
+                  <div className='flex flex-row gap-0 m-1'>
+                    <div className='border-black border-2 border-t-[3px] h-2 w-2 '/>
+                    <div className='border-black border-2 border-t-[3px] h-2 w-2 -ml-[5px] mt-[5px]'/>
+                  </div>
+                ) : (
+                  <div className='border-black border-2 border-t-4 h-3 w-3 m-1'/>
+                )}
               </div>
               <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickClose ? 'windowButtonsClick' : ''}`}>
                 <span className='text-black font-ms font-black text-window -m-px'>X</span>
