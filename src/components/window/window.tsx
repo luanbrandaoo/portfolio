@@ -30,6 +30,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
 
   const handleStartDragging = () => {
     setDragging(true);
+    handleWindowClick();
   };
 
   const handleStopDragging = () => {
@@ -83,9 +84,15 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
     removeProgram(programName);
   };
 
+  const handleWindowClick = () => {
+    if (program.state !== stateE.FOCUSED) {
+      setState(programName, stateE.FOCUSED);
+    }
+  };
+
   if (program.state !== stateE.MINIMIZED) {
     return (
-      <div>
+      <div onMouseDown={handleWindowClick}>
         <div className='absolute top-0 left-0' style={{ zIndex: index + 3 }}>
           <Rnd className="resizable" dragHandleClassName="handle" cancel=".cancel"
             default={{ x: initialPosition.x, y: initialPosition.y, width: initialSize.width, height: initialSize.height}} 
