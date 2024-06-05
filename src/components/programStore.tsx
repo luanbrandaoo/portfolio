@@ -21,36 +21,6 @@ export const stateE = {
   FOCUSED: 2
 }
 
-const windowIndexList = {};
-
-function windowIndexFocus(programName, state) {
-  
-  if (state !== stateE.FOCUSED) {
-    return state;
-  }
-
-  const maxIndex = Math.max(0, ...Object.values(windowIndexList));
-
-  if (programName in windowIndexList) {
-    const originalIndex = windowIndexList[programName];
-
-    windowIndexList[programName] = maxIndex + 1;
-
-    for (let key in windowIndexList) {
-      if (windowIndexList[key] > originalIndex) {
-        windowIndexList[key]--;
-      }
-    }
-  } else {
-    windowIndexList[programName] = maxIndex + 1;
-  }
-
-  // debugging
-  console.log('windowIndexList:', JSON.stringify(windowIndexList, null, 2));
-
-  return state;
-}
-
 const useProgramStore = create((set, get) => ({
   programs: [],
   addProgram: (program) => {
@@ -67,7 +37,8 @@ const useProgramStore = create((set, get) => ({
           ...program,
           position: { x: 0, y: 0 },
           size: { width: 0, height: 0 },
-          state: windowIndexFocus(program.programName, stateE.FOCUSED)
+          state: stateE.FOCUSED,
+          index: Math.max(...state.programs.map(p => p.index), 0) + 1
         }
       ]
     }));
@@ -85,17 +56,41 @@ const useProgramStore = create((set, get) => ({
       program.programName === programName ? { ...program, size: { width, height } } : program
     )
   })),
+  setIndex: (programName, programIndex) => set((state) => ({
+    programs: state.programs.map((program) =>
+      program.programName === programName ? { ...program, index: programIndex } : program
+    )
+  })),
   setState: (programName, programState) => set((state) => {
-    const updatedPrograms = state.programs.map((program) => {
-      if (program.programName === programName) {
-        return { ...program, state: windowIndexFocus(programName, programState) };
-      } else if (programState === stateE.FOCUSED && program.state === stateE.FOCUSED) {
-        return { ...program, state: stateE.UNFOCUSED };
-      }
-      return program;
-    });
+    if (programState === stateE.FOCUSED) {
+      let updatedPrograms = state.programs.map((program) => {
+        if (program.programName === programName) {
+          let filteredPrograms = state.programs.filter(p => p.index !== undefined).map(p => p.index);
+          let maxIndex = filteredPrograms.length > 0 ? Math.max(...filteredPrograms) : 0;
+          let oldIndex = program.index;
 
-    return { programs: updatedPrograms };
+          if (oldIndex !== maxIndex) {
+            program.index = maxIndex + 1;
+            state.programs.forEach(p => {
+              if (p.index > oldIndex) {
+                p.index -= 1;
+              }
+            });
+          }
+          return { ...program, state: stateE.FOCUSED };
+        } else if (program.state === stateE.FOCUSED) {
+          return { ...program, state: stateE.UNFOCUSED };
+        }
+        return program;
+      });
+      return { programs: updatedPrograms };
+    } else {
+      return {
+        programs: state.programs.map((program) => (
+          program.programName === programName ? { ...program, state: programState } : program
+        ))
+      };
+    }
   })
 }));
 

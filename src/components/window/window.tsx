@@ -16,12 +16,14 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
 
   const program = programs.find(p => p.programName === programName);
 
+  const index = program.index * 100;
+
   useEffect(() => {
     setPosition(programName, initialPosition.x, initialPosition.y);
     setSize(programName, initialSize.width, initialSize.height);
     setState(programName, initialState);
   }, []);
-
+  
 
   const dragRef = useRef(null);
   const [dragging, setDragging] = useState(false);
@@ -47,7 +49,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
     setClickMaximize(false);
     setClickClose(false);
   };
-  
+
   useEffect(() => {
     window.addEventListener('mouseup', handleGlobalMouseUp);
     return () => {window.removeEventListener('mouseup', handleGlobalMouseUp)};
@@ -84,12 +86,12 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
   if (program.state !== stateE.MINIMIZED) {
     return (
       <div>
-        <div className='absolute z-30 top-0 left-0'>
-          <Rnd className="my-resizable-component" dragHandleClassName="handle" cancel=".cancel"
+        <div className='absolute top-0 left-0' style={{ zIndex: index + 3 }}>
+          <Rnd className="resizable" dragHandleClassName="handle" cancel=".cancel"
             default={{ x: initialPosition.x, y: initialPosition.y, width: initialSize.width, height: initialSize.height}} 
             position={{ x: program.position.x, y: program.position.y }}
             size={{ width: program.size.width, height: program.size.height }}
-            onDragStart={handleStartDragging} onDragStop={handleStopDragging} 
+            onDragStart={handleStartDragging} onDragStop={handleStopDragging}
             onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}
             resizeHandleStyles={{
               top: {cursor:'ns-resize'},
@@ -101,7 +103,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
               bottomRight: {cursor: 'se-resize'},
               bottomLeft: {cursor: 'sw-resize'},
             }}>
-            <div ref={dragRef} className={`h-full w-full pointernone z-20 ${dragging ? 'dragWindow' : ''}`}>
+            <div ref={dragRef} className={`h-full w-full pointer-none ${dragging ? 'dragWindow' : ''}`} style={{ zIndex: index + 2 }}>
               <div className="h-9 w-auto titleBox pointerauto handle">
                 <div className='flex flex-row gap-1 align-center justify-end m-px'>
                   <div className={"h-6 w-6 flex align-center justify-center cancel"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
@@ -112,8 +114,9 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
             </div>
           </Rnd>
         </div>
-        <div className={"bg-silver window z-10 flex flex-col"}
-            style={{ position: 'absolute', top: `${program.position.y}px`, left: `${program.position.x}px`,
+        <div className={"bg-silver window flex flex-col"}
+          style={{ position: 'absolute', top: `${program.position.y}px`, left: `${program.position.x}px`,
+            zIndex: index + 1, 
             width: `${program.size.width}px`, height: `${program.size.height}px`}}>
           <div className="h-9 w-auto titleBox bg-windowblue flex flex-row justify-between">
             <div className='flex flex-row gap-2 align-center'>
