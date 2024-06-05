@@ -98,6 +98,7 @@ const Window = ({programName, icon, initialPosition, initialSize, initialState, 
             default={{ x: initialPosition.x, y: initialPosition.y, width: initialSize.width, height: initialSize.height}} 
             position={{ x: program.position.x, y: program.position.y }}
             size={{ width: program.size.width, height: program.size.height }}
+            maxHeight={window.innerHeight} maxWidth={window.innerWidth}
             onDragStart={handleStartDragging} onDragStop={handleStopDragging}
             onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}
             resizeHandleStyles={{
