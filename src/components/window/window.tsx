@@ -164,7 +164,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
                 {maximized ? (
                   <div className='flex flex-row gap-0 m-1'>
                     <div className='border-black border-2 border-t-[3px] h-2 w-2 '/>
-                    <div className='border-black border-2 border-t-[3px] h-2 w-2 -ml-[5px] mt-[5px]'/>
+                    <div className='border-black bg-silver border-2 border-t-[3px] h-2 w-2 -ml-[5px] mt-[5px]'/>
                   </div>
                 ) : (
                   <div className='border-black border-2 border-t-4 h-3 w-3 m-1'/>
