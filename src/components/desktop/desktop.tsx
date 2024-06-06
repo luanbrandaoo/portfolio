@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import Shortcut from './shortcut';
+import Selection from '../selection/selection';
 
 import fileLogo from '../../assets/file.png'; 
 import githubLogo from '../../assets/github.png'; 
@@ -29,11 +30,13 @@ const Desktop = () => {
 
   return (
     <main className="bg-desktop h-full w-full overflow-hidden fixed">
-      <Shortcut programName="Résumé" icon={fileLogo} />
-      <Shortcut programName="Mail" icon={mailLogo} />
-      <Shortcut programName="Github" icon={githubLogo} />
-      <Shortcut programName="VS Code" icon={VSLogo} />
-      <Shortcut programName="After Effects" icon={afterLogo} />
+      <Selection>
+        <Shortcut programName="Résumé" icon={fileLogo} />
+        <Shortcut programName="Mail" icon={mailLogo} />
+        <Shortcut programName="Github" icon={githubLogo} />
+        <Shortcut programName="VS Code" icon={VSLogo} />
+        <Shortcut programName="After Effects" icon={afterLogo} />
+      </Selection>
       {programs.map((program, index) => {
         const ProgramComponent = componentMap[program.programName];
         return ProgramComponent ? <ProgramComponent key={index} /> : null;
