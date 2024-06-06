@@ -155,7 +155,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
             width: `${program.size.width}px`, height: `${program.size.height}px`}}>
           <div className="h-9 w-auto titleBox bg-windowblue flex flex-row justify-between">
             <div className='flex flex-row gap-2 align-center'>
-              <img src={icon} className="h-6"></img>
+              <img src={icon} className="h-6" draggable="false"></img>
               <span className='text-white font-ms font-normal text-start'>{programName}</span>
             </div>
             <div className='flex flex-row gap-1 align-center m-px'>

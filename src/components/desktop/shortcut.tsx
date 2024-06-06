@@ -44,6 +44,7 @@ const Shortcut = (props) => {
       <img
         className={`h-12 mt-1 ${firstClick ? 'iconSelection' : ''}`}
         src={props.icon}
+        draggable="false"
       ></img>
       <span
         className={`text-white font-ms font-normal text-clock ${firstClick ? 'textSelection' : ''}`}

@@ -44,7 +44,7 @@ const ProgramTaskbar = ({programName, icon}) => {
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
         >
-            <img src={icon} className="h-6 mt-1" alt="Program Icon"></img>
+            <img src={icon} className="h-6 mt-1" draggable="false"></img>
             <span className="text-black font-ms font-normal text-start mt-1 ml-1">
                 {programName}
             </span>
