@@ -10,6 +10,16 @@ const Selection = ({ children }) => {
     const childRefs = useRef([]);
     const [selectedElements, setSelectedElements] = useState([]);
 
+    const setSelected = (index, isSelected) => {
+        setSelectedElements(prevSelectedElements => {
+            if (isSelected) {
+                return [index];
+            } else {
+                return prevSelectedElements.filter(item => item !== index);
+            }
+        });
+    };
+
     useEffect(() => {
         if (selecting) {
             window.addEventListener('mousemove', handleMouseMove);
@@ -40,11 +50,11 @@ const Selection = ({ children }) => {
       initialPos.current = { x: event.clientX, y: event.clientY };
       setSelectionBox({left: event.clientX, top: event.clientY, width: 0, height: 0});
       setSelecting(true);
-  };
+    };
 
     const handleMouseUp = () => {
       setSelecting(false);
-  };
+    };
 
   const checkSelection = (currentPos) => {
     const newSelectedElements = [];
@@ -84,6 +94,7 @@ const Selection = ({ children }) => {
                 React.cloneElement(child, {
                     ref: el => childRefs.current[index] = el,
                     selected: selectedElements.includes(index),
+                    setSelected: (isSelected) => setSelected(index, isSelected)
                 })
             )}
         </div>

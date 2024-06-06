@@ -3,17 +3,18 @@ import './desktopComponents.css';
 
 import useProgramStore from '../programStore';
 
-const Shortcut = forwardRef(({ programName, icon, selected }, ref) => {
+const Shortcut = forwardRef(({ programName, icon, selected, setSelected }, ref) => {
   const programs = useProgramStore((state) => state.programs);
   const addProgram = useProgramStore((state) => state.addProgram);
 
   const handleShortcutClick = (programName, icon) => {
     const newProgram = { programName, icon };
     addProgram(newProgram);
+    setSelected(false);
   };
 
   const handleMouseDown = () => {
-
+    setSelected(true);
   };
 
   const handleMouseUp = () => {
@@ -23,6 +24,8 @@ const Shortcut = forwardRef(({ programName, icon, selected }, ref) => {
   return (
     <div
       className={`h-24 w-24 flex flex-col gap-1 items-center justify-center ${selected ? 'selected' : ''}`}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     >
       <img
         ref={ref}
