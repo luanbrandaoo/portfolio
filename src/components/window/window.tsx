@@ -120,7 +120,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
     return (
       <div onMouseDown={handleWindowClick}>
         <div className='absolute top-0 left-0' style={{ zIndex: index + 3 }}>
-          <Rnd className="resizable" dragHandleClassName="handle" cancel=".cancel"
+          <Rnd dragHandleClassName="handle" cancel=".cancel"
             default={{ x: initialPosition.x, y: initialPosition.y, width: initialSize.width, height: initialSize.height}} 
             position={{ x: program.position.x, y: program.position.y }}
             size={{ width: program.size.width, height: program.size.height }}
@@ -149,7 +149,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
             </div>
           </Rnd>
         </div>
-        <div className={"bg-silver window flex flex-col"}
+        <div className={`bg-silver window flex flex-col ${program.state === stateE.FOCUSED ? 'shadowFocus' : ''}`}
           style={{ position: 'absolute', top: `${program.position.y}px`, left: `${program.position.x}px`,
             zIndex: index + 1, 
             width: `${program.size.width}px`, height: `${program.size.height}px`}}>
