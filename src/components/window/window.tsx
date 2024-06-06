@@ -41,7 +41,9 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
 
   const handleStopDragging = () => {
     const drag = dragRef.current.getBoundingClientRect();
-    setPosition(programName, drag.left, drag.top);
+    setPosition(programName,
+      Math.max(Math.min(drag.left, window.innerWidth - 50), -program.size.width + 50),
+      Math.max(Math.min(drag.top, window.innerHeight - 86), 0));
     setSize(programName, drag.width, drag.height);
     setMaximized(false);
     setDragging(false);
