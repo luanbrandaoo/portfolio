@@ -10,6 +10,40 @@ const Selection = ({ children }) => {
     const childRefs = useRef([]);
     const [selectedElements, setSelectedElements] = useState([]);
 
+    // grid calcs
+    const [grid, setGrid] = useState([]);
+    
+    const childrenArray = React.Children.toArray(children);
+    const gridContainerRef = useRef(null);
+    
+    const calculateInitialGrid = () => {
+        const container = gridContainerRef.current;
+        if (!container) return;
+
+        const newNumCols = Math.floor(container.clientWidth / 96);
+        const newNumRows = Math.floor(container.clientHeight / 96);
+
+        const newGrid = Array.from({ length: newNumRows }, () => Array(newNumCols).fill(null));
+
+        if (grid.length === 0) {
+            childrenArray.forEach((ref, index) => {
+                const col = Math.floor(index / newNumRows);
+                const row = index % newNumRows;
+                newGrid[row][col] = index;
+            });
+            setGrid(newGrid);
+        }
+    };
+
+    useEffect(() => {
+        calculateInitialGrid();
+        window.addEventListener('resize', calculateInitialGrid);
+        return () => {
+            window.removeEventListener('resize', calculateInitialGrid);
+        };
+    }, []);
+
+    // selection calcs
     const setSelected = (index, isSelected) => {
         setSelectedElements(prevSelectedElements => {
             if (isSelected) {
@@ -21,39 +55,37 @@ const Selection = ({ children }) => {
     };
 
     useEffect(() => {
+        const handleMouseMove = (event) => {
+            if (!selecting) return;
+            const currentPos = { x: event.clientX, y: event.clientY };
+            setSelectionBox({
+                left: Math.min(initialPos.current.x, currentPos.x),
+                top: Math.min(initialPos.current.y, currentPos.y),
+                width: Math.abs(currentPos.x - initialPos.current.x),
+                height: Math.abs(currentPos.y - initialPos.current.y)
+            });
+            checkSelection({ x: event.clientX, y: event.clientY });
+        };
+
+        const handleMouseUp = () => {
+            setSelecting(false);
+        };
+
         if (selecting) {
             window.addEventListener('mousemove', handleMouseMove);
             window.addEventListener('mouseup', handleMouseUp);
-        } else {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
         }
+
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
         };
     }, [selecting]);
 
-    const handleMouseMove = (event) => {
-      if (!selecting) return;
-      const currentPos = { x: event.clientX, y: event.clientY };
-      setSelectionBox({
-        left: Math.min(initialPos.current.x, currentPos.x),
-        top: Math.min(initialPos.current.y, currentPos.y),
-        width: Math.abs(currentPos.x - initialPos.current.x),
-        height: Math.abs(currentPos.y - initialPos.current.y)
-      });
-      checkSelection({ x: event.clientX, y: event.clientY });
-    };
-
     const handleMouseDown = (event) => {
-      initialPos.current = { x: event.clientX, y: event.clientY };
-      setSelectionBox({left: event.clientX, top: event.clientY, width: 0, height: 0});
-      setSelecting(true);
-    };
-
-    const handleMouseUp = () => {
-      setSelecting(false);
+        initialPos.current = { x: event.clientX, y: event.clientY };
+        setSelectionBox({left: event.clientX, top: event.clientY, width: 0, height: 0});
+        setSelecting(true);
     };
 
   const checkSelection = (currentPos) => {
@@ -88,15 +120,23 @@ const Selection = ({ children }) => {
     };
 
     return (
-        <div className='w-full h-full overflow-hidden fixed' onMouseDown={handleMouseDown}>
+        <div ref={gridContainerRef} className='w-full h-full overflow-hidden fixed' onMouseDown={handleMouseDown}>
             {selecting && <div className='fixed selection' style={selectionBox} />}
-            {React.Children.map(children, (child, index) => 
-                React.cloneElement(child, {
+            {grid.flat().map((index, gridIndex) => {
+                if (index === null) return null;
+
+                const row = Math.floor(gridIndex / grid[0].length);
+                const col = gridIndex % grid[0].length;
+                const position = { x: col * 96, y: row * 96 };
+
+                return React.cloneElement(childrenArray[index], {
+                    key: index,
                     ref: el => childRefs.current[index] = el,
                     selected: selectedElements.includes(index),
-                    setSelected: (isSelected) => setSelected(index, isSelected)
-                })
-            )}
+                    setSelected: (isSelected) => setSelected(index, isSelected),
+                    position: position
+                });
+            })}
         </div>
     );
 }
