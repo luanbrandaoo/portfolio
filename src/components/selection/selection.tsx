@@ -4,6 +4,7 @@ import './selection.css';
 
 const Selection = ({ children }) => {
     const childRefs = useRef([]);
+    const childrenArray = React.Children.toArray(children);
     const [selectedElements, setSelectedElements] = useState([]);
 
 
@@ -11,8 +12,6 @@ const Selection = ({ children }) => {
 
     // grid calcs
     const [grid, setGrid] = useState([]);
-    
-    const childrenArray = React.Children.toArray(children);
     const gridContainerRef = useRef(null);
     
     const calculateGrid = (isInitialRender) => {
@@ -70,6 +69,7 @@ const Selection = ({ children }) => {
 
     useEffect(() => {
         const handleMouseMove = (event) => {
+            if (isDraggable) return;
             const currentPos = { x: event.clientX, y: event.clientY };
             setSelectionBox({
                 left: Math.min(initialPos.current.x, currentPos.x),
@@ -97,7 +97,8 @@ const Selection = ({ children }) => {
 
     useEffect(() => {
         const handleUnselect = (event) => {
-            if (!childRefs.current.some(ref => ref && ref.contains(event.target))) {
+            const isShortcut = event.target.classList.contains('shortcut');
+            if (!isShortcut && !dragging) {
                 setSelectedElements([]);
             }
         };
@@ -158,6 +159,7 @@ const Selection = ({ children }) => {
 
     const handleDragStart = (event) => {
         if (selecting) return;
+
         setStartPosition({ x: event.clientX, y: event.clientY });
         setIsDraggable(true);
     };

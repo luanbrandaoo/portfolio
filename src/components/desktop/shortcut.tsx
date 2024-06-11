@@ -30,14 +30,14 @@ const Shortcut = forwardRef(({ programName, icon, selected, setSelected, positio
     >
       <img
         ref={ref}
-        className={`h-12 mt-1 ${selected ? 'iconSelection' : ''}`}
+        className={`shortcut h-12 mt-1 ${selected ? 'iconSelection' : ''}`}
         src={icon}
         draggable="false"
       />
-      <span
-        className={`text-white font-ms font-normal text-clock ${selected ? 'textSelection' : ''}`}
-      >
-        {programName}
+      <span 
+        onMouseDown={handleMouseDown}
+        className={`shortcut text-white font-ms font-normal text-clock ${selected ? 'textSelection' : ''}`}>
+          {programName}
       </span>
     </div>
   );
