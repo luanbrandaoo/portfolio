@@ -3,12 +3,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import './selection.css';
 
 const Selection = ({ children }) => {
-    const [selecting, setSelecting] = useState(false);
-    const [selectionBox, setSelectionBox] = useState({ left: 0, top: 0, width: 0, height: 0 });
-    const initialPos = useRef({ x: 0, y: 0 });
-    
     const childRefs = useRef([]);
     const [selectedElements, setSelectedElements] = useState([]);
+
+
+
 
     // grid calcs
     const [grid, setGrid] = useState([]);
@@ -16,7 +15,7 @@ const Selection = ({ children }) => {
     const childrenArray = React.Children.toArray(children);
     const gridContainerRef = useRef(null);
     
-    const calculateInitialGrid = () => {
+    const calculateGrid = (isInitialRender) => {
         const container = gridContainerRef.current;
         if (!container) return;
 
@@ -25,7 +24,15 @@ const Selection = ({ children }) => {
 
         const newGrid = Array.from({ length: newNumRows }, () => Array(newNumCols).fill(null));
 
-        if (grid.length === 0) {
+        if (isInitialRender) {
+            childrenArray.forEach((ref, index) => {
+                const col = Math.floor(index / newNumRows);
+                const row = index % newNumRows;
+                newGrid[row][col] = index;
+            });
+            setGrid(newGrid);
+        }
+        else{
             childrenArray.forEach((ref, index) => {
                 const col = Math.floor(index / newNumRows);
                 const row = index % newNumRows;
@@ -36,14 +43,21 @@ const Selection = ({ children }) => {
     };
 
     useEffect(() => {
-        calculateInitialGrid();
-        window.addEventListener('resize', calculateInitialGrid);
+        calculateGrid(true);
+        window.addEventListener('resize', () => calculateGrid(false));
         return () => {
-            window.removeEventListener('resize', calculateInitialGrid);
+            window.removeEventListener('resize', () => calculateGrid(false));
         };
     }, []);
 
+
+
+
     // selection calcs
+    const [selecting, setSelecting] = useState(false);
+    const [selectionBox, setSelectionBox] = useState({ left: 0, top: 0, width: 0, height: 0 });
+    const initialPos = useRef({ x: 0, y: 0 });
+
     const setSelected = (index, isSelected) => {
         setSelectedElements(prevSelectedElements => {
             if (isSelected) {
@@ -56,7 +70,6 @@ const Selection = ({ children }) => {
 
     useEffect(() => {
         const handleMouseMove = (event) => {
-            if (!selecting) return;
             const currentPos = { x: event.clientX, y: event.clientY };
             setSelectionBox({
                 left: Math.min(initialPos.current.x, currentPos.x),
@@ -82,7 +95,22 @@ const Selection = ({ children }) => {
         };
     }, [selecting]);
 
-    const handleMouseDown = (event) => {
+    useEffect(() => {
+        const handleUnselect = (event) => {
+            if (!childRefs.current.some(ref => ref && ref.contains(event.target))) {
+                setSelectedElements([]);
+            }
+        };
+    
+        window.addEventListener('mousedown', handleUnselect);
+        return () => {
+            window.removeEventListener('mousedown', handleUnselect);
+        };
+    }, []);
+    
+
+    const handleStartSelection = (event) => {
+        if (isDraggable) return;
         initialPos.current = { x: event.clientX, y: event.clientY };
         setSelectionBox({left: event.clientX, top: event.clientY, width: 0, height: 0});
         setSelecting(true);
@@ -119,8 +147,65 @@ const Selection = ({ children }) => {
     setSelectedElements(newSelectedElements);
     };
 
+
+
+
+    // dragging calcs
+    const [isDraggable, setIsDraggable] = useState(false);
+    const [dragging, setDragging] = useState(false);
+    const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
+    const [mouseDeltas, setMouseDeltas] = useState({ x: 0, y: 0 });
+
+    const handleDragStart = (event) => {
+        if (selecting) return;
+        setStartPosition({ x: event.clientX, y: event.clientY });
+        setIsDraggable(true);
+    };
+    
+    const handleMouseMove = (event) => {
+        if (!isDraggable) return;
+        setDragging(true);
+        const newPosition = { x: event.clientX, y: event.clientY };
+        const deltaX = newPosition.x - startPosition.x;
+        const deltaY = newPosition.y - startPosition.y;
+        setMouseDeltas({ x: deltaX, y: deltaY });
+    };
+
+    const handleDragStop = () => {
+        setIsDraggable(false);
+        setDragging(false);
+        setMouseDeltas({ x: 0, y: 0 });
+    };
+
+    useEffect(() => {
+        const handleMouseUp = () => {
+            if (isDraggable) {
+                handleDragStop();
+            }
+        };
+
+        if (isDraggable) {
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        }
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isDraggable]);
+
+    useEffect(() => {
+        if (selecting) {
+            setSelecting(false);
+        }
+    }, [dragging]);
+    
+
+
+
+    // render elements
     return (
-        <div ref={gridContainerRef} className='w-full h-full overflow-hidden fixed' onMouseDown={handleMouseDown}>
+        <div ref={gridContainerRef} className='w-full h-full overflow-hidden fixed' onMouseDown={handleStartSelection}>
             {selecting && <div className='fixed selection' style={selectionBox} />}
             {grid.flat().map((index, gridIndex) => {
                 if (index === null) return null;
@@ -128,14 +213,29 @@ const Selection = ({ children }) => {
                 const row = Math.floor(gridIndex / grid[0].length);
                 const col = gridIndex % grid[0].length;
                 const position = { x: col * 96, y: row * 96 };
+                const isSelected = selectedElements.includes(index);
 
-                return React.cloneElement(childrenArray[index], {
-                    key: index,
-                    ref: el => childRefs.current[index] = el,
-                    selected: selectedElements.includes(index),
-                    setSelected: (isSelected) => setSelected(index, isSelected),
-                    position: position
-                });
+                return (
+                    <div>
+                        {isSelected && (
+                            <div>
+                                {React.cloneElement(childrenArray[index], {
+                                    position: { x: position.x + mouseDeltas.x, y: position.y + mouseDeltas.y },
+                                    selected: false,
+                                })}
+                            </div>
+                        )}
+                        <div onMouseDown={handleDragStart} >
+                            {React.cloneElement(childrenArray[index], {
+                                key: index,
+                                ref: el => childRefs.current[index] = el,
+                                selected: selectedElements.includes(index),
+                                setSelected: (isSelected) => setSelected(index, isSelected),
+                                position: position
+                            })}
+                        </div>
+                    </div>
+                );
             })}
         </div>
     );
