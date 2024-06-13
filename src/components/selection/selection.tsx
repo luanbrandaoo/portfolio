@@ -160,6 +160,9 @@ const Selection = ({ children }) => {
     const handleDragStart = (event) => {
         if (selecting) return;
 
+        const isOverShortcut = Array.from(document.querySelectorAll(".shortcut")).some(element => element.contains(event.target));
+        if (!isOverShortcut) return;
+
         setStartPosition({ x: event.clientX, y: event.clientY });
         setIsDraggable(true);
     };
@@ -174,6 +177,23 @@ const Selection = ({ children }) => {
     };
 
     const handleDragStop = () => {
+        selectedElements.forEach(index => {
+            const ref = childRefs.current[`dragging_${index}`]
+            if (!dragging && ref) {
+                const rect = ref.getBoundingClientRect();
+                const pos = { 
+                    x: Math.max(0, Math.min(Math.floor((rect.left + rect.width / 2)/96), grid[0].length - 1)),
+                    y: Math.max(0, Math.min(Math.floor((rect.top + rect.height / 2)/96), grid.length - 1))
+                };
+
+                const row = grid.findIndex(row => row.includes(index));
+                const col = grid[row].indexOf(index);
+                
+                grid[row][col] = null;
+                grid[pos.y][pos.x] = index;
+            }
+        });
+
         setIsDraggable(false);
         setDragging(false);
         setMouseDeltas({ x: 0, y: 0 });
@@ -219,11 +239,12 @@ const Selection = ({ children }) => {
 
                 return (
                     <div>
-                        {isSelected && (
+                        {isSelected && dragging && (
                             <div>
                                 {React.cloneElement(childrenArray[index], {
                                     position: { x: position.x + mouseDeltas.x, y: position.y + mouseDeltas.y },
                                     selected: false,
+                                    ref: el => childRefs.current[`dragging_${index}`] = el,
                                 })}
                             </div>
                         )}
