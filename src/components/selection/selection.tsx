@@ -57,12 +57,16 @@ const Selection = ({ children }) => {
     const [selectionBox, setSelectionBox] = useState({ left: 0, top: 0, width: 0, height: 0 });
     const initialPos = useRef({ x: 0, y: 0 });
 
-    const setSelected = (index, isSelected) => {
+    const setSelected = (index, removeOthers) => {
         setSelectedElements(prevSelectedElements => {
-            if (isSelected) {
+            if (removeOthers) {
                 return [index];
-            } else {
-                return prevSelectedElements.filter(item => item !== index);
+            }
+            else if (selectedElements.includes(index)) {
+                return selectedElements;
+            }
+            else {
+                return [index];
             }
         });
     };
@@ -239,24 +243,26 @@ const Selection = ({ children }) => {
 
                 return (
                     <div>
+                        <div onMouseDown={handleDragStart} >
+                            {React.cloneElement(childrenArray[index], {
+                                key: index,
+                                ref: el => childRefs.current[index] = el,
+                                selected: isSelected,
+                                dragging: false,
+                                setSelected: (removeOthers) => setSelected(index, removeOthers),
+                                position: position
+                            })}
+                        </div>
                         {isSelected && dragging && (
                             <div>
                                 {React.cloneElement(childrenArray[index], {
                                     position: { x: position.x + mouseDeltas.x, y: position.y + mouseDeltas.y },
                                     selected: false,
+                                    dragging: true,
                                     ref: el => childRefs.current[`dragging_${index}`] = el,
                                 })}
                             </div>
                         )}
-                        <div onMouseDown={handleDragStart} >
-                            {React.cloneElement(childrenArray[index], {
-                                key: index,
-                                ref: el => childRefs.current[index] = el,
-                                selected: selectedElements.includes(index),
-                                setSelected: (isSelected) => setSelected(index, isSelected),
-                                position: position
-                            })}
-                        </div>
                     </div>
                 );
             })}
