@@ -6,12 +6,13 @@ const Selection = ({ children }) => {
     const childRefs = useRef([]);
     const childrenArray = React.Children.toArray(children);
     const [selectedElements, setSelectedElements] = useState([]);
+    const [rendered, setRendered] = useState(false);
 
 
 
 
     // grid calcs
-    const [grid, setGrid] = useState([]);
+    const gridRef = useRef([]);
     const gridContainerRef = useRef(null);
     
     const calculateGrid = (isInitialRender) => {
@@ -24,25 +25,61 @@ const Selection = ({ children }) => {
         const newGrid = Array.from({ length: newNumRows }, () => Array(newNumCols).fill(null));
 
         if (isInitialRender) {
-            childrenArray.forEach((ref, index) => {
+            childrenArray.forEach((_, index) => {
                 const col = Math.floor(index / newNumRows);
                 const row = index % newNumRows;
                 newGrid[row][col] = index;
             });
-            setGrid(newGrid);
-        }
-        else{
-            childrenArray.forEach((ref, index) => {
-                const col = Math.floor(index / newNumRows);
-                const row = index % newNumRows;
-                newGrid[row][col] = index;
-            });
-            setGrid(newGrid);
+            gridRef.current = newGrid;
+        } else {
+            const flat = []
+            const numRows = gridRef.current.length;
+            const numCols = gridRef.current[0].length;
+
+            //flat 
+            for (let col = 0; col < numCols; col++) {
+                for (let row = 0; row < numRows; row++) {
+                    flat.push(gridRef.current[row][col]);
+                }
+            }
+
+            const newSize = newNumCols * newNumRows;
+            const difference = newSize - flat.length;
+
+            //remove nulls
+            if (difference < 0) {
+                let count = 0;
+                for (let i = flat.length - 1; i >= 0 && count < Math.abs(difference); i--) {
+                    if (flat[i] === null) {
+                        flat.splice(i, 1);
+                        count++;
+                    }
+                }
+            }
+            //add nulls
+            else if (difference > 0) {
+                for (let i = 0; i < difference; i++) {
+                    flat.push(null);
+                }
+            }
+            else {
+                return;
+            }
+            
+            //turn into matrix
+            for (let i = 0; i < flat.length; i++) {
+                const row = i % newNumRows;
+                const col = Math.floor(i / newNumRows);
+                newGrid[row][col] = flat[i];
+            }
+        
+            gridRef.current = newGrid;
         }
     };
 
     useEffect(() => {
         calculateGrid(true);
+        setRendered(true);
         window.addEventListener('resize', () => calculateGrid(false));
         return () => {
             window.removeEventListener('resize', () => calculateGrid(false));
@@ -121,35 +158,35 @@ const Selection = ({ children }) => {
         setSelecting(true);
     };
 
-  const checkSelection = (currentPos) => {
-    const newSelectedElements = [];
-    const { x: startX, y: startY } = initialPos.current;
-    const { x: endX, y: endY } = currentPos;
+    const checkSelection = (currentPos) => {
+        const newSelectedElements = [];
+        const { x: startX, y: startY } = initialPos.current;
+        const { x: endX, y: endY } = currentPos;
 
-    const left = Math.min(startX, endX);
-    const right = Math.max(startX, endX);
-    const top = Math.min(startY, endY);
-    const bottom = Math.max(startY, endY);
+        const left = Math.min(startX, endX);
+        const right = Math.max(startX, endX);
+        const top = Math.min(startY, endY);
+        const bottom = Math.max(startY, endY);
 
-    childRefs.current.forEach((ref, index) => {
-        if (ref) {
-            const rect = ref.getBoundingClientRect();
-            const { left: rectLeft, right: rectRight, top: rectTop, bottom: rectBottom } = rect;
+        childRefs.current.forEach((ref, index) => {
+            if (ref) {
+                const rect = ref.getBoundingClientRect();
+                const { left: rectLeft, right: rectRight, top: rectTop, bottom: rectBottom } = rect;
 
-            const intersect = !(
-                right < rectLeft ||
-                left > rectRight ||
-                bottom < rectTop ||
-                top > rectBottom
-            );
+                const intersect = !(
+                    right < rectLeft ||
+                    left > rectRight ||
+                    bottom < rectTop ||
+                    top > rectBottom
+                );
 
-            if (intersect) {
-                newSelectedElements.push(index);
+                if (intersect) {
+                    newSelectedElements.push(index);
+                }
             }
-        }
-    });
+        });
 
-    setSelectedElements(newSelectedElements);
+        setSelectedElements(newSelectedElements);
     };
 
 
@@ -186,15 +223,15 @@ const Selection = ({ children }) => {
             if (!dragging && ref) {
                 const rect = ref.getBoundingClientRect();
                 const pos = { 
-                    x: Math.max(0, Math.min(Math.floor((rect.left + rect.width / 2)/96), grid[0].length - 1)),
-                    y: Math.max(0, Math.min(Math.floor((rect.top + rect.height / 2)/96), grid.length - 1))
+                    x: Math.max(0, Math.min(Math.floor((rect.left + rect.width / 2) / 96), gridRef.current[0].length - 1)),
+                    y: Math.max(0, Math.min(Math.floor((rect.top + rect.height / 2) / 96), gridRef.current.length - 1))
                 };
 
-                const row = grid.findIndex(row => row.includes(index));
-                const col = grid[row].indexOf(index);
-                
-                grid[row][col] = null;
-                grid[pos.y][pos.x] = index;
+                const row = gridRef.current.findIndex(row => row.includes(index));
+                const col = gridRef.current[row].indexOf(index);
+
+                gridRef.current[row][col] = null;
+                gridRef.current[pos.y][pos.x] = index;
             }
         });
 
@@ -233,27 +270,29 @@ const Selection = ({ children }) => {
     return (
         <div ref={gridContainerRef} className='w-full h-full overflow-hidden fixed' onMouseDown={handleStartSelection}>
             {selecting && <div className='fixed selection' style={selectionBox} />}
-            {grid.flat().map((index, gridIndex) => {
+            {rendered && gridRef.current.flat().map((index, gridIndex) => {
                 if (index === null) return null;
 
-                const row = Math.floor(gridIndex / grid[0].length);
-                const col = gridIndex % grid[0].length;
+                const row = Math.floor(gridIndex / gridRef.current[0].length);
+                const col = gridIndex % gridRef.current[0].length;
                 const position = { x: col * 96, y: row * 96 };
                 const isSelected = selectedElements.includes(index);
 
                 return (
                     <div>
-                        <div onMouseDown={handleDragStart} >
-                            {React.cloneElement(childrenArray[index], {
-                                key: index,
-                                ref: el => childRefs.current[index] = el,
-                                selected: isSelected,
-                                dragging: false,
-                                setSelected: (removeOthers) => setSelected(index, removeOthers),
-                                position: position
-                            })}
-                        </div>
-                        {isSelected && dragging && (
+                        {childrenArray[index] && (
+                            <div onMouseDown={handleDragStart} >
+                                {React.cloneElement(childrenArray[index], {
+                                    key: index,
+                                    ref: el => childRefs.current[index] = el,
+                                    selected: isSelected,
+                                    dragging: false,
+                                    setSelected: (removeOthers) => setSelected(index, removeOthers),
+                                    position: position
+                                })}
+                            </div>
+                        )}
+                        {isSelected && dragging && childrenArray[index] && (
                             <div>
                                 {React.cloneElement(childrenArray[index], {
                                     position: { x: position.x + mouseDeltas.x, y: position.y + mouseDeltas.y },
