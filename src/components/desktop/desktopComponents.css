@@ -10,3 +10,7 @@
   background-color: #000076;
   border: 1px dotted #ffff94;
 }
+
+.selection{
+  border: 2px dotted #000;
+}

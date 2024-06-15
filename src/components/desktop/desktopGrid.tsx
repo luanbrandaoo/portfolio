@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import './selection.css';
+import './desktopComponents.css';
 
-const Selection = ({ children }) => {
+const DesktopGrid = ({ children }) => {
     const childRefs = useRef([]);
     const childrenArray = React.Children.toArray(children);
     const [selectedElements, setSelectedElements] = useState([]);
@@ -311,4 +311,4 @@ const Selection = ({ children }) => {
     );
 }
 
-export default Selection;
+export default DesktopGrid;
