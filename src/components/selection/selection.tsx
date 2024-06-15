@@ -230,8 +230,10 @@ const Selection = ({ children }) => {
                 const row = gridRef.current.findIndex(row => row.includes(index));
                 const col = gridRef.current[row].indexOf(index);
 
-                gridRef.current[row][col] = null;
-                gridRef.current[pos.y][pos.x] = index;
+                if (gridRef.current[pos.y][pos.x] == null){
+                    gridRef.current[row][col] = null;
+                    gridRef.current[pos.y][pos.x] = index;
+                }
             }
         });
 
