@@ -32,7 +32,7 @@ const StartMenu = () => {
 
     return (
         <div className='start-menu flex flex-row'>
-            <div className='bg-sidebar flex flex-col justify-end h-full w-12'>
+            <div className='bg-windowsilver flex flex-col justify-end h-full w-12'>
                 <img src={sidebar} draggable="false"></img>
             </div>
             <div className='w-full bg-silver'>

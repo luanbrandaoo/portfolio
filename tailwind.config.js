@@ -16,12 +16,13 @@ export default {
     extend: {
       colors: {
         'desktop': '#018281',
-        'sidebar': '#7a7c79',
         'silver': '#c0c0c0',
         'border': '#fafafa',
         'border2': '#5a5a5a',
         'selection': '#000076',
         'windowblue': '#00007c',
+        'windowsilver': '#7a7c79',
+        'silvertext': '#c0c4c8',
       },
     }
   }

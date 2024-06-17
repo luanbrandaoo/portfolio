@@ -153,10 +153,10 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
           style={{ position: 'absolute', top: `${program.position.y}px`, left: `${program.position.x}px`,
             zIndex: index + 1, 
             width: `${program.size.width}px`, height: `${program.size.height}px`}}>
-          <div className="h-9 w-auto titleBox bg-windowblue flex flex-row justify-between">
+          <div className={`h-9 w-auto titleBox flex flex-row justify-between  ${program.state === stateE.FOCUSED ? 'bg-windowblue' : 'bg-windowsilver'}`}>
             <div className='flex flex-row gap-2 align-center'>
-              <img src={icon} className="h-6" draggable="false"></img>
-              <span className='text-white font-ms font-normal text-start'>{programName}</span>
+              <img src={icon} className={`h-6 ${program.state === stateE.FOCUSED ? '' : 'grayscale'}`} draggable="false"></img>
+              <span className={`font-ms font-normal text-start ${program.state === stateE.FOCUSED ? 'text-white' : 'text-silvertext'}`}>{programName}</span>
             </div>
             <div className='flex flex-row gap-1 align-center m-px'>
               <div className={`bg-silver h-6 w-6 windowButtons flex align-center justify-center  ${clickMinimize ? 'windowButtonsClick' : ''}`}>
