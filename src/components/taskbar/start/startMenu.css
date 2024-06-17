@@ -1,0 +1,13 @@
+.start-menu {
+    position: fixed;
+    bottom: 44px;
+    height: 400px;
+    width: 260px;
+    left: 0;
+
+    box-shadow: 2px 0px 1px 0px rgba(0, 0, 0, 0.6);
+    border-top: 3px solid #fafafa;
+    border-left: 3px solid #fafafa;
+    border-bottom: 3px solid #5a5a5a;
+    border-right: 3px solid #5a5a5a;
+}
