@@ -16,7 +16,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
   }));
 
   const program = programs.find(p => p.programName === programName);
-
+  const windowRef = useRef(null);
   const index = program.index * 100;
 
   useEffect(() => {
@@ -116,9 +116,21 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
     }
   };
 
+  useEffect(() => {
+    const handleGlobalMouseDown = (event) => {
+      if (windowRef.current && !windowRef.current.contains(event.target)) {
+        setState(programName, stateE.UNFOCUSED);
+      }
+    };
+    window.addEventListener('mousedown', handleGlobalMouseDown);
+    return () => {
+      window.removeEventListener('mousedown', handleGlobalMouseDown);
+    };
+  }, []);
+
   if (program.state !== stateE.MINIMIZED) {
     return (
-      <div onMouseDown={handleWindowClick}>
+      <div ref={windowRef} onMouseDown={handleWindowClick}>
         <div className='absolute top-0 left-0' style={{ zIndex: index + 3 }}>
           <Rnd dragHandleClassName="handle" cancel=".cancel"
             default={{ x: initialPosition.x, y: initialPosition.y, width: initialSize.width, height: initialSize.height}} 
