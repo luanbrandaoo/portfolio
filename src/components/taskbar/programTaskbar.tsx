@@ -3,7 +3,7 @@ import './taskbarComponents.css';
 
 import useProgramStore, {stateE} from '../programStore';
 
-const ProgramTaskbar = ({programName, icon}) => {
+const ProgramTaskbar = ({programName, icon, minify}) => {
     const { programs, setState } = useProgramStore(state => ({
         programs: state.programs,
         setState: state.setState
@@ -45,9 +45,11 @@ const ProgramTaskbar = ({programName, icon}) => {
             onMouseUp={handleMouseUp}
         >
             <img src={icon} className="h-6 mt-1" draggable="false"></img>
-            <span className="text-black font-ms font-normal text-start mt-1 ml-1">
-                {programName}
-            </span>
+            {!minify && (
+                <span className="text-black font-ms font-normal text-start mt-1 ml-1">
+                    {programName}
+                </span>
+            )}
         </div>
     );
 };
