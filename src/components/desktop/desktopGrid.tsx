@@ -270,7 +270,7 @@ const DesktopGrid = ({ children }) => {
 
     // render elements
     return (
-        <div ref={gridContainerRef} className='w-full h-full overflow-hidden fixed' onMouseDown={handleStartSelection}>
+        <div ref={gridContainerRef} className='w-full h-full overflow-hidden fixed' onMouseDown={handleStartSelection} onTouchStart={handleStartSelection}>
             {selecting && <div className='fixed selection' style={selectionBox} />}
             {rendered && gridRef.current.flat().map((index, gridIndex) => {
                 if (index === null) return null;
@@ -283,7 +283,7 @@ const DesktopGrid = ({ children }) => {
                 return (
                     <div>
                         {childrenArray[index] && (
-                            <div onMouseDown={handleDragStart} >
+                            <div onMouseDown={handleDragStart} onTouchStart={handleDragStart}>
                                 {React.cloneElement(childrenArray[index], {
                                     key: index,
                                     ref: el => childRefs.current[index] = el,

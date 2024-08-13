@@ -30,7 +30,7 @@ const StartMenuButton = () => {
   }, []);
 
   return (
-    <div onMouseDown={() => setClick(true)} onClick={() => startMenuState()}
+    <div onMouseDown={() => setClick(true)} onTouchStart={() => setClick(true)} onClick={() => startMenuState()}
         className={`h-8 w-20 startMenuButton flex align-center justify-center
         ${startOpen && !click ? 'startMenuButtonClick' : ''}
         ${click ? 'programTaskbarClick' : ''} `}>

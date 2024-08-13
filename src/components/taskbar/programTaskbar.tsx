@@ -42,7 +42,9 @@ const ProgramTaskbar = ({programName, icon, minify}) => {
             ${program.state === stateE.FOCUSED && !click ? 'programTaskbarActive' : ''}
             ${click ? 'programTaskbarClick' : ''} `}
             onMouseDown={handleMouseDown}
+            onTouchStart={handleMouseDown}
             onMouseUp={handleMouseUp}
+            onTouchEnd={handleMouseUp}
         >
             <img src={icon} className="h-6 mt-1 object-scale-down" draggable="false"></img>
             {!minify && (

@@ -38,10 +38,12 @@ const Shortcut = forwardRef(({ programName, icon, selected, setSelected, draggin
         src={icon}
         draggable="false"
         onMouseDown={handleMouseDown}
+        onTouchStart={handleMouseDown}
         onClick={handleMouseClick}
       />
       <span 
         onMouseDown={handleMouseDown}
+        onTouchStart={handleMouseDown}
         onClick={handleMouseClick}
         className={`shortcut text-white font-ms font-normal text-clock ${dragging ? 'opacity-70' : ''} ${selected ? 'textSelection' : ''}`}>
           {programName}

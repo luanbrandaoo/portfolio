@@ -130,7 +130,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
 
   if (program.state !== stateE.MINIMIZED) {
     return (
-      <div ref={windowRef} onMouseDown={handleWindowClick}>
+      <div ref={windowRef} onMouseDown={handleWindowClick} onTouchStart={handleWindowClick}>
         <div className='absolute top-0 left-0' style={{ zIndex: index + 3 }}>
           <Rnd dragHandleClassName="handle" cancel=".cancel"
             default={{ x: initialPosition.x, y: initialPosition.y, width: initialSize.width, height: initialSize.height}} 
@@ -153,9 +153,9 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
             <div ref={dragRef} className={`h-full w-full pointer-none ${dragging ? 'dragWindow' : ''}`} style={{ zIndex: index + 2 }}>
               <div className="h-9 w-auto titleBox pointerauto handle">
                 <div className='flex flex-row gap-1 align-center justify-end m-px overflow-clip'>
-                  <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize}></div>
-                  <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize}></div>
-                  <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownClose} onMouseUp={handleMouseUpClose}></div>
+                  <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownMinimize} onTouchStart={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize} onTouchEnd={handleMouseUpMinimize}></div>
+                  <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownMaximize} onTouchStart={handleMouseDownMaximize} onMouseUp={handleMouseUpMaximize} onTouchEnd={handleMouseUpMaximize}></div>
+                  <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownClose} onTouchStart={handleMouseDownClose} onMouseUp={handleMouseUpClose} onTouchEnd={handleMouseUpClose}></div>
                 </div>
               </div>
             </div>
