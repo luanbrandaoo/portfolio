@@ -18,7 +18,9 @@ const StartMenuButton = () => {
   const startMenuState = () => {
     toggleStartOpen();
     programs.forEach(program => {
-      setState(program.programName, stateE.UNFOCUSED);
+      if (getState(program.programName) === stateE.FOCUSED) {
+        setState(program.programName, stateE.UNFOCUSED);
+      }
     });
   };
 
