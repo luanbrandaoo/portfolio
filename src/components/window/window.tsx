@@ -96,7 +96,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
         screenWidth: window.innerWidth, screenHeight: window.innerHeight,
       };
       setPosition(programName, 0, 0);
-      setSize(programName, window.innerWidth, window.innerHeight);
+      setSize(programName, window.innerWidth, window.innerHeight-44);
       setMaximized(true);
     }
   };

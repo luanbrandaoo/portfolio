@@ -29,7 +29,7 @@ const Desktop = () => {
   }, []);
 
   return (
-    <main className="bg-desktop h-full w-full overflow-hidden fixed">
+    <main className="bg-desktop h-[calc(100vh-2.75rem)] w-full overflow-hidden fixed">
       <DesktopGrid>
         <Shortcut programName="Résumé" icon={fileLogo} />
         <Shortcut programName="Mail" icon={mailLogo} />

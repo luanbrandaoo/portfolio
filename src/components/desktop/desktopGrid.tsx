@@ -270,7 +270,7 @@ const DesktopGrid = ({ children }) => {
 
     // render elements
     return (
-        <div ref={gridContainerRef} className='w-full h-full overflow-hidden fixed' onMouseDown={handleStartSelection} onTouchStart={handleStartSelection}>
+        <div ref={gridContainerRef} className='w-full h-[calc(100vh-2.75rem)] overflow-hidden fixed' onMouseDown={handleStartSelection} onTouchStart={handleStartSelection}>
             {selecting && <div className='fixed selection' style={selectionBox} />}
             {rendered && gridRef.current.flat().map((index, gridIndex) => {
                 if (index === null) return null;
