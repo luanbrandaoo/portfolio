@@ -131,7 +131,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
   if (program.state !== stateE.MINIMIZED) {
     return (
       <div ref={windowRef} onMouseDown={handleWindowClick} onTouchStart={handleWindowClick}>
-        <div className='absolute top-0 left-0' style={{ zIndex: index + 3 }}>
+        <div className='absolute top-0 left-0' style={{ zIndex: index + 3, pointerEvents: 'none'}}>
           <Rnd dragHandleClassName="handle" cancel=".cancel"
             default={{ x: initialPosition.x, y: initialPosition.y, width: initialSize.width, height: initialSize.height}} 
             position={{ x: program.position.x, y: program.position.y }}
@@ -141,16 +141,16 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
             onDragStart={handleStartDragging} onDragStop={handleStopDragging}
             onResizeStart={handleStartDragging} onResizeStop={handleStopDragging}
             resizeHandleStyles={{
-              top: {cursor:'ns-resize'},
-              bottom: {cursor:'ns-resize'},
-              left: {cursor: 'ew-resize'},
-              right: {cursor: 'ew-resize'},
-              topRight: {cursor: 'ne-resize'},
-              topLeft: {cursor: 'nw-resize'},
-              bottomRight: {cursor: 'se-resize'},
-              bottomLeft: {cursor: 'sw-resize'},
+              top: {cursor:'ns-resize', pointerEvents: 'fill'},
+              bottom: {cursor:'ns-resize', pointerEvents: 'fill'},
+              left: {cursor: 'ew-resize', pointerEvents: 'fill'},
+              right: {cursor: 'ew-resize', pointerEvents: 'fill'},
+              topRight: {cursor: 'ne-resize', pointerEvents: 'fill'},
+              topLeft: {cursor: 'nw-resize', pointerEvents: 'fill'},
+              bottomRight: {cursor: 'se-resize', pointerEvents: 'fill'},
+              bottomLeft: {cursor: 'sw-resize', pointerEvents: 'fill'},
             }}>
-            <div ref={dragRef} className={`h-full w-full pointer-none ${dragging ? 'dragWindow' : ''}`} style={{ zIndex: index + 2 }}>
+            <div ref={dragRef} className={`w-full pointer-none ${dragging ? 'dragWindow h-full' : ''}`} style={{ zIndex: index + 2 }}>
               <div className="h-9 w-auto titleBox pointerauto handle">
                 <div className='flex flex-row gap-1 align-center justify-end m-px overflow-clip'>
                   <div className={"h-6 w-6 flex align-center justify-center cancel overflow-clip"} onMouseDown={handleMouseDownMinimize} onTouchStart={handleMouseDownMinimize} onMouseUp={handleMouseUpMinimize} onTouchEnd={handleMouseUpMinimize}></div>
@@ -189,7 +189,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
               </div>
             </div>
           </div>
-          <div className='bg-border2 contentbox h-full'>
+          <div className='bg-border2 contentbox h-full' style={{ zIndex: index + 3, pointerEvents: 'auto' }}>
             {children}
           </div>
         </div>
