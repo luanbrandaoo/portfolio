@@ -189,7 +189,7 @@ const Window = ({programName, icon, initialPosition, initialSize, minimumSize, i
               </div>
             </div>
           </div>
-          <div className='bg-border2 contentbox h-full' style={{ zIndex: index + 3, pointerEvents: 'auto' }}>
+          <div className='bg-border2 contentbox h-full overflow-hidden' style={{ zIndex: index + 3, pointerEvents: 'auto' }}>
             {children}
           </div>
         </div>
