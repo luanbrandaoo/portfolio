@@ -4,6 +4,8 @@ import Window from '../window/window';
 import { stateE } from '../programStore';
 
 const languageColors = {
+  "HTML": "#e34c26",
+  "CSS": "#563d7c",
   "JavaScript": "#f1e05a",
   "Python": "#3572A5",
   "Java": "#b07219",
