@@ -6,9 +6,11 @@ export default {
   ],
   theme: {
     fontSize: {
+      big: '20px',
       window: '18px',
       start: '18px',
       clock: '15px',
+      mini: '10px',
     },
     fontFamily: {
       ms: ["MS-Sans-Serif"],
@@ -23,6 +25,8 @@ export default {
         'windowblue': '#00007c',
         'windowsilver': '#7a7c79',
         'silvertext': '#c0c4c8',
+        'aftereffects': '#3d3d3d',
+        'afterorange': '#a2790f',
       },
     }
   }
