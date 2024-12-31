@@ -103,6 +103,13 @@ const ProjectWindow = () => {
 
   const onPlayerReady = (event) => {
     playerRef.current = event.target;
+
+    const duration = playerRef.current.getDuration();
+    setSelectedVideo((prevVideo) => ({
+      ...prevVideo,
+      duration: duration,
+    }));
+
     playerRef.current.addEventListener('onStateChange', (e) => {
       if (e.data === 1) {
         setIsPlaying(true);
@@ -201,11 +208,18 @@ const ProjectWindow = () => {
       const percentage = (x - 18) / (width - 39);
   
       if (percentage < 0) {
-        setVideoPercentage(0);
+        handleGoToStart();
       } else if (percentage > 1) {
-        setVideoPercentage(1);
+        handleGoToEnd();
       } else {
         setVideoPercentage(percentage);
+        const currentTime = selectedVideo.duration*percentage;
+
+        const hours = Math.floor(currentTime / 3600);
+        const minutes = Math.floor((currentTime % 3600) / 60);
+        const seconds = Math.floor(currentTime % 60);
+        const frames = Math.floor((currentTime % 1) * selectedVideo.fps);
+        setCurrentTime(formatTime(hours, minutes, seconds, frames));
       }
     }
   };
