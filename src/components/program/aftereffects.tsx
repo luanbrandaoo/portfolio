@@ -8,8 +8,8 @@ import YouTube from 'react-youtube';
 import './programStyles.css'
 
 const videos = [
-  { title: 'Sample video 1', videoId: 'aqz-KE-bpKQ', duration: 635, fps: 30, size: '1920x1080', color: '#FF0000' },
-  { title: 'Sample video 2', videoId: 'aqz-KE-bpKQ', duration: 635, fps: 30, size: '1920x1080', color: '#FF0000' },
+  { title: 'Sample video 1', videoId: 'aqz-KE-bpKQ', duration: 635, fps: 30, size: '1920x1080', color: '#ffffff'},
+  { title: 'Sample video 2', videoId: 'aqz-KE-bpKQ', duration: 635, fps: 30, size: '1920x1080', color: '#FF0000'},
 ];
 
 const thumbnailLink = (videoId, resolution = 'default') => {
@@ -77,6 +77,10 @@ const ProjectWindow = () => {
     };
   }, [timestampline, selectedVideo]);
 
+  const formatTime = (hours, minutes, seconds, frames) => {
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(frames).padStart(2, '0')}`;
+  }
+
   useEffect(() => {
     if (!isPlaying) return;
 
@@ -87,11 +91,10 @@ const ProjectWindow = () => {
         const minutes = Math.floor((currentTime % 3600) / 60);
         const seconds = Math.floor(currentTime % 60);
         const frames = Math.floor((currentTime % 1) * selectedVideo.fps);
-        setCurrentTime(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(frames).padStart(2, '0')}`);
+        setCurrentTime(formatTime(hours, minutes, seconds, frames));
         
         const percentage = (currentTime / selectedVideo.duration);
         setVideoPercentage(percentage);
-        console.log(percentage);
       }
     }, 1000 / selectedVideo.fps);
 
@@ -121,6 +124,66 @@ const ProjectWindow = () => {
       rel: 0,
       showinfo: 0,
     },
+  };
+
+  const handleGoToStart = () => {
+    if (playerRef.current) {
+      playerRef.current.seekTo(0);
+      setCurrentTime('00:00:00:00');
+    }
+  };
+
+  const handleStepBack = () => {
+    if (playerRef.current) {
+      const currentTime = playerRef.current.getCurrentTime() - 0.05;
+      playerRef.current.seekTo(currentTime);
+
+      const hours = Math.floor(currentTime / 3600);
+      const minutes = Math.floor((currentTime % 3600) / 60);
+      const seconds = Math.floor(currentTime % 60);
+      const frames = Math.floor((currentTime % 1) * selectedVideo.fps);
+
+      setCurrentTime(formatTime(hours, minutes, seconds, frames));
+    }
+  };
+
+  const handlePlayPause = () => {
+    if (playerRef.current) {
+      if (isPlaying) {
+        playerRef.current.pauseVideo();
+      } else {
+        playerRef.current.playVideo();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleStepForward = () => {
+    if (playerRef.current) {
+      const currentTime = playerRef.current.getCurrentTime() + 0.05;
+      playerRef.current.seekTo(currentTime);
+      
+      const hours = Math.floor(currentTime / 3600);
+      const minutes = Math.floor((currentTime % 3600) / 60);
+      const seconds = Math.floor(currentTime % 60);
+      const frames = Math.floor((currentTime % 1) * selectedVideo.fps);
+
+      setCurrentTime(formatTime(hours, minutes, seconds, frames));
+    }
+  };
+
+  const handleGoToEnd = () => {
+    if (playerRef.current) {
+      playerRef.current.seekTo(selectedVideo.duration);
+
+      const currentTime = selectedVideo.duration;
+      const hours = Math.floor(currentTime / 3600);
+      const minutes = Math.floor((currentTime % 3600) / 60);
+      const seconds = Math.floor(currentTime % 60);
+      const frames = Math.floor((currentTime % 1) * selectedVideo.fps);
+
+      setCurrentTime(formatTime(hours, minutes, seconds, frames));
+    }
   };
 
   return (
@@ -156,6 +219,42 @@ const ProjectWindow = () => {
           <div
             className={`bg-aftereffects h-full w-1/5 ${selected === 2 ? 'shadow-[0_0_0_0.25rem_#a2790f]' : ''}`}
             onClick={() => setSelected(2)}>
+              <div className='h-16 w-full border-b-2 border-windowsilver'>
+                <span className='font-ms font-semibold text-mini text-white ml-2 -mt-1'>Preview</span>
+                <div className='flex justify-center gap-1 mt-1'>
+                  <button onClick={handleGoToStart} className='control-button'>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                      <path d="M6 5v14h2V5zm2 7l11 7V5z"/>
+                    </svg>
+                  </button>
+                  <button onClick={handleStepBack} className='control-button'>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                      <path d="M11 19V5l-7 7zm9-14v14l-7-7z"/>
+                    </svg>
+                  </button>
+                  <button onClick={handlePlayPause} className='control-button'>
+                    {isPlaying ? (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
+                      </svg>
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    )}
+                  </button>
+                  <button onClick={handleStepForward} className='control-button'>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                      <path d="M13 19V5l7 7zm-9-14v14l7-7z"/>
+                    </svg>
+                  </button>
+                  <button onClick={handleGoToEnd} className='control-button'>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                      <path d="M18 5v14h-2V5zm-2 7l-11 7V5z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
           </div>
         </div>
         <div className={`h-2/5 w-full flex flex-row gap-1 ${selected === 3 ? 'shadow-[0_0_0_0.25rem_#a2790f]' : ''}`}
@@ -163,6 +262,10 @@ const ProjectWindow = () => {
           <div className='bg-aftereffects h-full w-1/5'>
             <div className='h-8 w-full border-b border-border2 flex justify-center pt-1'>
               <span className='font-ms font-semibold text-big text-afterorange'>{currentTime}</span>
+            </div>
+            <div className='h-4 w-full flex flex-row gap-1.5 pt-1 mt-1'>
+              <img src={thumbnailLink(selectedVideo.videoId)} className="h-2.5 w-3.5 object-cover object-center" />
+              <span className='font-ms font-normal text-mini text-white leading-3'>{selectedVideo.title}</span>
             </div>
           </div>
           <div className='bg-aftereffects h-full w-4/5'>
@@ -178,7 +281,7 @@ const ProjectWindow = () => {
             </div>
             <div className='h-full w-full'>
               <div className='h-full w-px absolute bg-afterorange' style={{marginLeft: `${19+playerPosition}px`}}/>
-              
+              <div className='h-4 w-full mt-1' style={{backgroundColor: selectedVideo.color}}/>
             </div>
           </div>
         </div>
