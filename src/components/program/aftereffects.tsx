@@ -130,6 +130,7 @@ const ProjectWindow = () => {
     if (playerRef.current) {
       playerRef.current.seekTo(0);
       setCurrentTime('00:00:00:00');
+      setVideoPercentage(0);
     }
   };
 
@@ -142,8 +143,10 @@ const ProjectWindow = () => {
       const minutes = Math.floor((currentTime % 3600) / 60);
       const seconds = Math.floor(currentTime % 60);
       const frames = Math.floor((currentTime % 1) * selectedVideo.fps);
-
       setCurrentTime(formatTime(hours, minutes, seconds, frames));
+
+      const percentage = (currentTime / selectedVideo.duration);
+      setVideoPercentage(percentage);
     }
   };
 
@@ -167,8 +170,10 @@ const ProjectWindow = () => {
       const minutes = Math.floor((currentTime % 3600) / 60);
       const seconds = Math.floor(currentTime % 60);
       const frames = Math.floor((currentTime % 1) * selectedVideo.fps);
-
       setCurrentTime(formatTime(hours, minutes, seconds, frames));
+
+      const percentage = (currentTime / selectedVideo.duration);
+      setVideoPercentage(percentage);
     }
   };
 
@@ -183,6 +188,7 @@ const ProjectWindow = () => {
       const frames = Math.floor((currentTime % 1) * selectedVideo.fps);
 
       setCurrentTime(formatTime(hours, minutes, seconds, frames));
+      setVideoPercentage(1);
     }
   };
 
