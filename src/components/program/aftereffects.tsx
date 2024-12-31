@@ -192,6 +192,40 @@ const ProjectWindow = () => {
     }
   };
 
+  const handleTimestampClick = (event) => {
+    if (timestampline.current) {
+      const rect = timestampline.current.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const width = rect.width;
+  
+      const percentage = (x-18) / (width-39);
+  
+      if (percentage < 0) {
+        setVideoPercentage(0);
+      } else if (percentage > 1) {
+        setVideoPercentage(1);
+      } else {
+        setVideoPercentage(percentage);
+      }
+    }
+  };
+  
+  const handleTimestampUp = (event) => {
+    handleTimestampClick(event);
+  
+    const handleMouseMove = (event) => {
+      handleTimestampClick(event);
+    };
+  
+    const handleTimestampUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleTimestampUp);
+    };
+  
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleTimestampUp);
+  };
+
   return (
     <div className='relative h-full w-full'>
       <div className='h-full w-full flex flex-col gap-1'>
@@ -275,7 +309,7 @@ const ProjectWindow = () => {
             </div>
           </div>
           <div className='bg-aftereffects h-full w-4/5'>
-            <div className='h-8 w-full border-b border-border2 flex flex-row' ref={timestampline}>
+            <div className='h-8 w-full border-b border-border2 flex flex-row' ref={timestampline} onMouseDown={handleTimestampUp}>
               <div className='h-8 w-full absolute pt-4' style={{paddingLeft: `${12+playerPosition}px`}}>
                 <svg className="fill-current text-afterorange" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
                   <path d="M3.62 1.213q-.29.29-.302.715l.006 7.981q0 .425.209.93.21.505.506.802l2.323 2.323a.97.97 0 0 0 .715.29q.425 0 .715-.29l2.323-2.323q.296-.296.505-.801c.209-.505.207-.645.204-.924l.006-7.993q0-.413-.296-.709-.29-.29-.715-.302l-5.49.006a.97.97 0 0 0-.709.296"/>
