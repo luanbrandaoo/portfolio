@@ -192,13 +192,13 @@ const ProjectWindow = () => {
     }
   };
 
-  const handleTimestampClick = (event) => {
+  const handleTimestampDown = (event) => {
     if (timestampline.current) {
       const rect = timestampline.current.getBoundingClientRect();
-      const x = event.clientX - rect.left;
+      const x = (event.touches ? event.touches[0].clientX : event.clientX) - rect.left;
       const width = rect.width;
   
-      const percentage = (x-18) / (width-39);
+      const percentage = (x - 18) / (width - 39);
   
       if (percentage < 0) {
         setVideoPercentage(0);
@@ -211,19 +211,23 @@ const ProjectWindow = () => {
   };
   
   const handleTimestampUp = (event) => {
-    handleTimestampClick(event);
+    handleTimestampDown(event);
   
     const handleMouseMove = (event) => {
-      handleTimestampClick(event);
+      handleTimestampDown(event);
     };
   
-    const handleTimestampUp = () => {
+    const handleMouseUp = () => {
       document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleTimestampUp);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleMouseMove);
+      document.removeEventListener('touchend', handleMouseUp);
     };
   
     document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleTimestampUp);
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('touchmove', handleMouseMove);
+    document.addEventListener('touchend', handleMouseUp);
   };
 
   return (
@@ -309,7 +313,7 @@ const ProjectWindow = () => {
             </div>
           </div>
           <div className='bg-aftereffects h-full w-4/5'>
-            <div className='h-8 w-full border-b border-border2 flex flex-row' ref={timestampline} onMouseDown={handleTimestampUp}>
+            <div className='h-8 w-full border-b border-border2 flex flex-row' ref={timestampline} onMouseDown={handleTimestampUp} onTouchStart={handleTimestampUp}>
               <div className='h-8 w-full absolute pt-4' style={{paddingLeft: `${12+playerPosition}px`}}>
                 <svg className="fill-current text-afterorange" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
                   <path d="M3.62 1.213q-.29.29-.302.715l.006 7.981q0 .425.209.93.21.505.506.802l2.323 2.323a.97.97 0 0 0 .715.29q.425 0 .715-.29l2.323-2.323q.296-.296.505-.801c.209-.505.207-.645.204-.924l.006-7.993q0-.413-.296-.709-.29-.29-.715-.302l-5.49.006a.97.97 0 0 0-.709.296"/>
