@@ -46,6 +46,7 @@ const ProjectWindow = () => {
   const playerRef = useRef(null);
   const timestampline = useRef(null);
   const [timestamplineWidth, setTimestamplineWidth] = useState(0);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
     const handleResize = (entries) => {
@@ -162,6 +163,10 @@ const ProjectWindow = () => {
       if (isPlaying) {
         playerRef.current.pauseVideo();
       } else {
+        if (isUpdated) {
+          playerRef.current.seekTo(selectedVideo.duration*videoPercentage);
+          setIsUpdated(false);
+        }
         playerRef.current.playVideo();
       }
       setIsPlaying(!isPlaying);
@@ -207,12 +212,18 @@ const ProjectWindow = () => {
   
       const percentage = (x - 18) / (width - 39);
   
+      if (isPlaying) {
+        handlePlayPause();
+      }
+
       if (percentage < 0) {
         handleGoToStart();
       } else if (percentage > 1) {
         handleGoToEnd();
       } else {
         setVideoPercentage(percentage);
+        setIsUpdated(true);
+        playerRef.current.seekTo(selectedVideo.duration*videoPercentage);
         const currentTime = selectedVideo.duration*percentage;
 
         const hours = Math.floor(currentTime / 3600);
@@ -232,6 +243,7 @@ const ProjectWindow = () => {
     };
   
     const handleMouseUp = () => {
+      playerRef.current.seekTo(selectedVideo.duration*videoPercentage);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('touchmove', handleMouseMove);
