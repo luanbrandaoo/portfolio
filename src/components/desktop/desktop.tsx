@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Shortcut from './shortcut';
 import DesktopGrid from './desktopGrid';
 
+import sidebar from '../../assets/sidebar.png';
 import fileLogo from '../../assets/file.png'; 
 import githubLogo from '../../assets/github.png'; 
 import mailLogo from '../../assets/mail.png';
@@ -30,6 +31,7 @@ const Desktop = () => {
 
   return (
     <main className="bg-desktop h-[calc(100vh-2.75rem)] w-full overflow-hidden fixed">
+      <img height={0} width={0} src={sidebar} draggable="false"></img>
       <DesktopGrid>
         <Shortcut programName="Résumé" icon={fileLogo} />
         <Shortcut programName="Mail" icon={mailLogo} />
