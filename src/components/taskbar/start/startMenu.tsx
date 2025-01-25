@@ -7,6 +7,7 @@ import githubLogo from '../../../assets/github.png';
 import mailLogo from '../../../assets/mail.png';
 import VSLogo from '../../../assets/vscode.png'; 
 import afterLogo from '../../../assets/af.png'; 
+import aboutmeLogo from '../../../assets/aboutme.png';
 
 import { useEffect } from 'react';
 import useStartMenuStore from './startmenuStore';

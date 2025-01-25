@@ -6,8 +6,10 @@ import Mail from './program/mail';
 import Github from './program/github';
 import VSCode from './program/vscode';
 import AfterEffects from './program/aftereffects';
+import AboutMe from './program/aboutme';
 
 export const componentMap = {
+  "About Me": AboutMe,
   "Résumé": Resume,
   "Mail": Mail,
   "Github": Github,

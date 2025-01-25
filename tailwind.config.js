@@ -6,6 +6,7 @@ export default {
   ],
   theme: {
     fontSize: {
+      title: '26px',
       big: '20px',
       window: '18px',
       start: '18px',
