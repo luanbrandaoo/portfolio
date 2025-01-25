@@ -8,7 +8,7 @@ import VSCode from './program/vscode';
 import AfterEffects from './program/aftereffects';
 
 export const componentMap = {
-  "Résumé": Resume,
+  "Resume": Resume,
   "Mail": Mail,
   "Github": Github,
   "VS Code": VSCode,

@@ -36,7 +36,7 @@ const StartMenu = () => {
                 <img src={sidebar} draggable="false"></img>
             </div>
             <div className='w-full bg-silver'>
-                <ProgramStart programName={'Résumé'} logo={fileLogo}/>
+                <ProgramStart programName={'Resume'} logo={fileLogo}/>
                 <ProgramStart programName={'Mail'} logo={mailLogo}/>
                 <ProgramStart programName={'Github'} logo={githubLogo}/>
                 <ProgramStart programName={'VS Code'} logo={VSLogo}/>
