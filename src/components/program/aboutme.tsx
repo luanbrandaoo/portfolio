@@ -8,7 +8,7 @@ import {stateE} from '../programStore';
 const AboutMe = () => {
   return (
     <Window programName={'About Me'} icon={aboutmeLogo}
-    initialPosition={{x: 100, y: 50}} initialSize={{width: 500, height: 500}}
+    initialPosition={{x: 30, y: 30}} initialSize={{width: 500, height: 500}}
     minimumSize={{width: 280, height: 150}}
     initialState={stateE.FOCUSED}>
         <div className="h-full w-full bg-silver flex flex-col gap-4 p-2 overflow-auto">
