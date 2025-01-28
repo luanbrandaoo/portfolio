@@ -11,7 +11,7 @@ const AboutMe = () => {
     initialPosition={{x: 100, y: 50}} initialSize={{width: 500, height: 500}}
     minimumSize={{width: 280, height: 150}}
     initialState={stateE.FOCUSED}>
-        <div className="h-full w-full bg-silver flex flex-col gap-4 p-2">
+        <div className="h-full w-full bg-silver flex flex-col gap-4 p-2 overflow-auto">
           <div className='flex flex-row'>
             <img src={profileImage} className="w-40 h-40 rounded-full"/>
             <div className="flex flex-col justify-center ml-4">
