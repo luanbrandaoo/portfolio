@@ -7,8 +7,8 @@ import sidebar from '../../assets/sidebar.png';
 import fileLogo from '../../assets/file.png'; 
 import githubLogo from '../../assets/github.png'; 
 import mailLogo from '../../assets/mail.png';
-import VSLogo from '../../assets/vscode.png'; 
-import afterLogo from '../../assets/af.png'; 
+//import VSLogo from '../../assets/vscode.png'; 
+//import afterLogo from '../../assets/af.png'; 
 import aboutmeLogo from '../../assets/aboutme.png';
 
 import useProgramStore, {componentMap} from '../programStore';
@@ -42,8 +42,8 @@ const Desktop = () => {
         <Shortcut programName="Resume" icon={fileLogo} />
         <Shortcut programName="Mail" icon={mailLogo} />
         <Shortcut programName="Github" icon={githubLogo} />
-        <Shortcut programName="VS Code" icon={VSLogo} />
-        <Shortcut programName="After Effects" icon={afterLogo} />
+        {/* <Shortcut programName="VS Code" icon={VSLogo} /> */}
+        {/* <Shortcut programName="After Effects" icon={afterLogo} /> */}
       </DesktopGrid>
       {programs.map((program, index) => {
         const ProgramComponent = componentMap[program.programName];

@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import Resume from './program/resume';
 import Mail from './program/mail';
 import Github from './program/github';
-import VSCode from './program/vscode';
-import AfterEffects from './program/aftereffects';
+//import VSCode from './program/vscode';
+//import AfterEffects from './program/aftereffects';
 import AboutMe from './program/aboutme';
 
 export const componentMap = {
@@ -13,8 +13,6 @@ export const componentMap = {
   "Resume": Resume,
   "Mail": Mail,
   "Github": Github,
-  "VS Code": VSCode,
-  "After Effects": AfterEffects
 }
 
 export const stateE = {

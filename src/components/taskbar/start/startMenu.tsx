@@ -5,8 +5,8 @@ import sidebar from '../../../assets/sidebar.png';
 import fileLogo from '../../../assets/file.png'; 
 import githubLogo from '../../../assets/github.png'; 
 import mailLogo from '../../../assets/mail.png';
-import VSLogo from '../../../assets/vscode.png'; 
-import afterLogo from '../../../assets/af.png'; 
+// import VSLogo from '../../../assets/vscode.png'; 
+// import afterLogo from '../../../assets/af.png'; 
 import aboutmeLogo from '../../../assets/aboutme.png';
 
 import { useEffect } from 'react';
@@ -40,8 +40,8 @@ const StartMenu = () => {
                 <ProgramStart programName={'Resume'} logo={fileLogo}/>
                 <ProgramStart programName={'Mail'} logo={mailLogo}/>
                 <ProgramStart programName={'Github'} logo={githubLogo}/>
-                <ProgramStart programName={'VS Code'} logo={VSLogo}/>
-                <ProgramStart programName={'After Effects'} logo={afterLogo}/>
+                {/* <ProgramStart programName={'VS Code'} logo={VSLogo}/> */}
+                {/* <ProgramStart programName={'After Effects'} logo={afterLogo}/> */}
             </div>
         </div>
     );
