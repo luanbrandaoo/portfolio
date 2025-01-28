@@ -10,7 +10,7 @@ import AboutMe from './program/aboutme';
 
 export const componentMap = {
   "About Me": AboutMe,
-  "Résumé": Resume,
+  "Resume": Resume,
   "Mail": Mail,
   "Github": Github,
   "VS Code": VSCode,

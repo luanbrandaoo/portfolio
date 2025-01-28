@@ -39,7 +39,7 @@ const Desktop = () => {
     <main className="bg-desktop h-[calc(100vh-2.75rem)] w-full overflow-hidden fixed">
       <img height={0} width={0} src={sidebar} draggable="false"></img>
       <DesktopGrid>
-        <Shortcut programName="Résumé" icon={fileLogo} />
+        <Shortcut programName="Resume" icon={fileLogo} />
         <Shortcut programName="Mail" icon={mailLogo} />
         <Shortcut programName="Github" icon={githubLogo} />
         <Shortcut programName="VS Code" icon={VSLogo} />
